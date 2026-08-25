@@ -1,5 +1,5 @@
 // src/services/interviewService.js
-import { fetchApi } from './api';
+import { fetchApi } from './fetch.js';
 
 const RESOURCE = '/comments';
 

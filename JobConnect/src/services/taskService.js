@@ -1,5 +1,5 @@
 // src/services/todoService.js
-import { fetch } from './fetch.js';
+import { fetchApi } from './fetch.js';
 
 const RESOURCE = '/todos';
 

@@ -1,6 +1,6 @@
-const BASE_URL = 'http://localhost:3000';
+export const BASE_URL = 'http://localhost:3000';
 
-export const fetch = async (endpoint, options = {}) => {
+export const fetchApi = async (endpoint, options = {}) => {
   const token = localStorage.getItem('accessToken');
   const headers = {
     'Content-Type': 'application/json',
