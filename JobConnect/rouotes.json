@@ -1,0 +1,14 @@
+{
+  "/api/users/*": "/users/$1",
+  "/api/products/*": "/products/$1",
+  "/api/carts/*": "/carts/$1",
+  "/api/posts/*": "/posts/$1",
+  "/api/comments/*": "/comments/$1",
+  "/api/all/*": "/all/$1",
+  "/api/users": "/users",
+  "/api/products": "/products",
+  "/api/carts": "/carts",
+  "/api/posts": "/posts",
+  "/api/comments": "/comments",
+  "/api/all": "/all"
+}
