@@ -1,0 +1,315 @@
+/* src/pages/Todos/Todos.css */
+
+/* Variables locales para mantener consistencia con la paleta solicitada */
+:root {
+  --olive-wood: #7b6b43ff;
+  --dark-garnet: #6b0504ff;
+  --dusk-blue: #3a506bff;
+  --alabaster-grey: #dae3e5ff;
+  --honeydew: #e5f4e3ff;
+  
+  /* Tokens de Glassmorphism */
+  --glass-bg: rgba(58, 80, 107, 0.25);
+  --glass-border: rgba(218, 227, 229, 0.15);
+  --glass-highlight: rgba(255, 255, 255, 0.08);
+  --blur-strength: 16px;
+}
+
+/* Contenedor Principal con efecto Glass */
+.todos-page {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur-strength));
+  -webkit-backdrop-filter: blur(var(--blur-strength));
+  border: 1px solid var(--glass-border);
+  border-radius: 24px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  color: var(--alabaster-grey);
+}
+
+/* Encabezado */
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.page-header h1 {
+  color: var(--honeydew);
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+/* Botón Principal "Nueva Tarea" */
+.page-header button {
+  background: var(--olive-wood);
+  color: var(--honeydew);
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(123, 107, 67, 0.3);
+}
+
+.page-header button:hover {
+  background: #8c7a4d;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(123, 107, 67, 0.5);
+}
+
+/* Lista de Tareas */
+.todos-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Item Individual (Glass Card) */
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.2rem 1.5rem;
+  background: var(--glass-highlight);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+}
+
+.todo-item:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateX(5px);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Estado Completado */
+.todo-item.completed {
+  opacity: 0.6;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.todo-item.completed h3 {
+  text-decoration: line-through;
+  color: var(--dark-garnet);
+}
+
+/* Información de la Tarea */
+.todo-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+}
+
+.todo-info input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  accent-color: var(--dark-garnet);
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.todo-info h3 {
+  color: var(--honeydew);
+  margin: 0 0 0.3rem 0;
+  font-size: 1.1rem;
+}
+
+.todo-info p {
+  margin: 0 0 0.5rem 0;
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+/* Metadatos (Asignado, Prioridad, Fecha) */
+.todo-meta {
+  display: flex;
+  gap: 1.2rem;
+  font-size: 0.75rem;
+  color: var(--olive-wood);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Acciones (Editar/Eliminar) */
+.todo-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.todo-actions button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--alabaster-grey);
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.todo-actions button:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--alabaster-grey);
+}
+
+/* Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* Modal Content */
+.modal-content {
+  background: rgba(58, 80, 107, 0.9);
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 2rem;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.3s ease-out;
+}
+
+.modal-content h2 {
+  color: var(--honeydew);
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 400;
+}
+
+/* Estilos del Formulario dentro del Modal */
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--alabaster-grey);
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: var(--alabaster-grey);
+  font-family: inherit;
+  box-sizing: border-box;
+  transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--olive-wood);
+  background: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 3px rgba(123, 107, 67, 0.2);
+}
+
+/* Botones del Formulario */
+.form-group button[type="submit"] {
+  width: 100%;
+  padding: 0.9rem;
+  background: var(--dusk-blue);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.3s;
+}
+
+.form-group button[type="submit"]:hover {
+  background: #4a6382;
+}
+
+.form-group button[type="submit"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Botón Cancelar del Modal */
+.modal-content > button:last-child {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.8rem;
+  background: transparent;
+  border: 1px solid var(--dark-garnet);
+  color: var(--dark-garnet);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.modal-content > button:last-child:hover {
+  background: var(--dark-garnet);
+  color: white;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .todos-page {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .todo-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .todo-actions {
+    margin-left: 0;
+    width: 100%;
+    justify-content: flex-end;
+  }
+  
+  .todo-meta {
+    flex-wrap: wrap;
+    gap: 0.8rem;
+  }
+}
