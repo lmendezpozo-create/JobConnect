@@ -10,7 +10,7 @@ export const useFetch = (service) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await service.getInterviews?.(params) || await service.getTodos?.(params);
+      const result = await service.getInterviews?.(params) || await service.getTasks?.(params);
       setData(result);
       return result;
     } catch (err) {
@@ -25,7 +25,7 @@ export const useFetch = (service) => {
     setLoading(true);
     setError(null);
     try {
-      const result = await service.createInterview?.(item) || await service.createTodo?.(item);
+      const result = await service.createInterview?.(item) || await service.createTask?.(item);
       setData((prev) => [result, ...prev]);
       return result;
     } catch (err) {
@@ -42,9 +42,9 @@ export const useFetch = (service) => {
     try {
       let result;
       if (method === 'put') {
-        result = await service.updateTodo?.(id, item);
+        result = await service.updateTask?.(id, item);
       } else {
-        result = await service.updateInterview?.(id, item) || await service.patchTodo?.(id, item);
+        result = await service.updateInterview?.(id, item) || await service.patchTask?.(id, item);
       }
       setData((prev) => prev.map((el) => (el.id === id ? result : el)));
       return result;
@@ -60,7 +60,7 @@ export const useFetch = (service) => {
     setLoading(true);
     setError(null);
     try {
-      await service.deleteInterview?.(id) || await service.deleteTodo?.(id);
+      await service.deleteInterview?.(id) || await service.deleteTask?.(id);
       setData((prev) => prev.filter((el) => el.id !== id));
     } catch (err) {
       setError(err.message);
