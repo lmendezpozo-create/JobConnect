@@ -17,8 +17,19 @@
             "perfil": "postulante"
         }
     ],
-    "entrevistas":[],
-    "vacantes":[]
+    "entrevistas":[
+        {
+            "id": "1",
+            "fecha": "2022-01-01",
+            "hora": "10:00",
+            "lugar": "Oficina",
+            "postulante": "1",
+            "vacante": "1"
+        }
+    ],
+    "vacantes":[
+        
+    ]
 }
 
 
