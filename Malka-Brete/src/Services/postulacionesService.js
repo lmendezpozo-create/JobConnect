@@ -1,12 +1,12 @@
 /**
  * Service: PostulacionesService
- * Manejo de peticiones asíncronas con Fetch API, Async/Await, Export/Import
- * Consume el endpoint http://localhost:3000/postulaciones de json-server.
+ * Manejo de peticiones asíncronas con Fetch API, Async/Await, Export/Import.
+ * Consume http://localhost:3000/postulaciones (json-server) con fallback en memoria.
  */
 
 const API_URL = 'http://localhost:3000/postulaciones';
 
-// Datos iniciales de demostración en memoria por si el servidor local de db.json no se encuentra corriendo
+// Datos iniciales de demostración para visualización inmediata si postulaciones en db.json está vacío
 const INITIAL_DEMO_DATA = [
     { id: "1", nombre: "María Rodríguez", empresa: "TechCorp Inc.", cargo: "Senior Frontend Dev", email: "m.rodriguez@email.com", fecha: "12 Oct 2023", estado: "Entrevista", iniciales: "MR" },
     { id: "2", nombre: "Juan Gómez", empresa: "Creative Studio", cargo: "UX Designer", email: "juan.g@email.com", fecha: "10 Oct 2023", estado: "Pendiente", iniciales: "JG" },
@@ -35,34 +35,45 @@ const INITIAL_DEMO_DATA = [
     { id: "25", nombre: "Adriana Gil", empresa: "Vanguard Tech", cargo: "Product Designer", email: "adriana.g@vanguard.com", fecha: "25 Aug 2023", estado: "Rechazado", iniciales: "AG" }
 ];
 
-const LOCAL_STORAGE_KEY = 'jobconnect_postulaciones_standalone_cache';
+const LOCAL_STORAGE_KEY = 'jobconnect_postulaciones_cache_v2';
 
 /**
- * Obtener la lista completa de postulaciones
+ * Obtener postulaciones desde la API de json-server
  * @returns {Promise<Array>}
  */
 export async function getPostulaciones() {
     try {
-        // Intentar obtener desde la API de json-server
         const response = await fetch(API_URL);
         if (response.ok) {
-            const data = await response.json();
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
-            return data;
+            const serverData = await response.json();
+            
+            // Si el servidor devuelve datos creados en db.json
+            if (Array.isArray(serverData) && serverData.length > 0) {
+                // Combinar sin duplicados con INITIAL_DEMO_DATA para mantener la vista completa
+                const serverIds = new Set(serverData.map(item => String(item.id)));
+                const remainingDemo = INITIAL_DEMO_DATA.filter(item => !serverIds.has(String(item.id)));
+                const combined = [...serverData, ...remainingDemo];
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(combined));
+                return combined;
+            }
         }
-        throw new Error('Endpoint API no disponible');
     } catch (error) {
-        console.warn('postulacionesService GET (Servidor offline, utilizando dataset en memoria):', error.message);
-        
-        const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (cached) {
-            return JSON.parse(cached);
-        }
-
-        // Si no hay cache, inicializar con el array de demostración en memoria
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_DEMO_DATA));
-        return INITIAL_DEMO_DATA;
+        console.warn('postulacionesService GET API warning:', error.message);
     }
+
+    // Fallback a localStorage o datos iniciales de demostración
+    const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (cached) {
+        try {
+            const parsed = JSON.parse(cached);
+            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_DEMO_DATA));
+    return INITIAL_DEMO_DATA;
 }
 
 /**
@@ -85,39 +96,39 @@ export async function createPostulacion(nuevaPostulacion) {
         nuevaPostulacion.fecha = today.toLocaleDateString('es-ES', options);
     }
 
+    let createdItem = null;
+
     try {
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(nuevaPostulacion)
         });
 
         if (response.ok) {
-            const created = await response.json();
-            const currentCache = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || JSON.stringify(INITIAL_DEMO_DATA));
-            currentCache.unshift(created);
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(currentCache));
-            return created;
+            createdItem = await response.json();
         }
-        throw new Error('Error en POST al servidor');
     } catch (error) {
-        console.warn('postulacionesService POST (Modo cliente):', error.message);
-        
-        const currentCache = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || JSON.stringify(INITIAL_DEMO_DATA));
-        const mockCreated = {
+        console.warn('postulacionesService POST warning:', error.message);
+    }
+
+    if (!createdItem) {
+        createdItem = {
             id: String(Date.now()),
             ...nuevaPostulacion
         };
-        currentCache.unshift(mockCreated);
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(currentCache));
-        return mockCreated;
     }
+
+    // Actualizar cache local
+    const currentList = await getPostulaciones();
+    currentList.unshift(createdItem);
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(currentList));
+
+    return createdItem;
 }
 
 /**
- * Actualizar una postulación existente (PATCH)
+ * Actualizar postulación (PATCH)
  * @param {string|number} id 
  * @param {Object} camposActualizados 
  * @returns {Promise<Object>}
@@ -126,61 +137,48 @@ export async function updatePostulacion(id, camposActualizados) {
     try {
         const response = await fetch(`${API_URL}/${id}`, {
             method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(camposActualizados)
         });
 
         if (response.ok) {
             const updated = await response.json();
-            const currentCache = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || JSON.stringify(INITIAL_DEMO_DATA));
-            const index = currentCache.findIndex(item => String(item.id) === String(id));
+            const currentList = await getPostulaciones();
+            const index = currentList.findIndex(item => String(item.id) === String(id));
             if (index !== -1) {
-                currentCache[index] = { ...currentCache[index], ...updated };
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(currentCache));
+                currentList[index] = { ...currentList[index], ...updated };
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(currentList));
             }
             return updated;
         }
-        throw new Error('Error en PATCH al servidor');
     } catch (error) {
-        console.warn('postulacionesService PATCH (Modo cliente):', error.message);
-        
-        const currentCache = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || JSON.stringify(INITIAL_DEMO_DATA));
-        const index = currentCache.findIndex(item => String(item.id) === String(id));
-        if (index !== -1) {
-            currentCache[index] = { ...currentCache[index], ...camposActualizados };
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(currentCache));
-            return currentCache[index];
-        }
-        return { id, ...camposActualizados };
+        console.warn('postulacionesService PATCH warning:', error.message);
     }
+
+    const currentList = await getPostulaciones();
+    const index = currentList.findIndex(item => String(item.id) === String(id));
+    if (index !== -1) {
+        currentList[index] = { ...currentList[index], ...camposActualizados };
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(currentList));
+        return currentList[index];
+    }
+    return { id, ...camposActualizados };
 }
 
 /**
- * Eliminar una postulación (DELETE)
+ * Eliminar postulación (DELETE)
  * @param {string|number} id 
  * @returns {Promise<boolean>}
  */
 export async function deletePostulacion(id) {
     try {
-        const response = await fetch(`${API_URL}/${id}`, {
-            method: 'DELETE'
-        });
-
-        if (response.ok || response.status === 200 || response.status === 204) {
-            const currentCache = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || JSON.stringify(INITIAL_DEMO_DATA));
-            const filtered = currentCache.filter(item => String(item.id) !== String(id));
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
-            return true;
-        }
-        throw new Error('Error en DELETE al servidor');
+        await fetch(`${API_URL}/${id}`, { method: 'DELETE' });
     } catch (error) {
-        console.warn('postulacionesService DELETE (Modo cliente):', error.message);
-        
-        const currentCache = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || JSON.stringify(INITIAL_DEMO_DATA));
-        const filtered = currentCache.filter(item => String(item.id) !== String(id));
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
-        return true;
+        console.warn('postulacionesService DELETE warning:', error.message);
     }
+
+    const currentList = await getPostulaciones();
+    const filtered = currentList.filter(item => String(item.id) !== String(id));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(filtered));
+    return true;
 }

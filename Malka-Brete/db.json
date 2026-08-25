@@ -1,0 +1,23 @@
+{
+  "candidatos": [
+    { "id": 1, "firstName": "Emily", "lastName": "Johnson", "email": "emily.johnson@email.com", "phone": "+1234567890", "company": "Tech Corp", "role": "Desarrollador Frontend", "status": "activo" },
+    { "id": 2, "firstName": "Carlos", "lastName": "Mendoza", "email": "carlos.m@email.com", "phone": "+50688887777", "company": "Data Solutions", "role": "Analista de Datos", "status": "en_proceso" },
+    { "id": 3, "firstName": "Carlos", "lastName": "Ruiz", "email": "carlos.ruiz@email.com", "phone": "+50670001122", "company": "Independiente", "role": "Diseñador UX", "status": "activo" }
+  ],
+  "usuarios": [
+    { "id": 1, "username": "admin", "password": "admin123", "nombre": "Admin Principal", "rol": "admin" },
+    { "id": 2, "username": "reclutador1", "password": "reclu123", "nombre": "María López", "rol": "reclutador" },
+    { "id": 3, "username": "candidato1", "password": "candi123", "nombre": "Carlos Ruiz", "rol": "candidato" }
+  ],
+  "vacantes": [
+    { "id": 1, "titulo": "Desarrollador Frontend", "empresa": "Tech Corp", "ubicacion": "San José, Costa Rica", "salario": "₡1,200,000", "tipo": "Tiempo completo", "descripcion": "Buscamos desarrollador frontend con experiencia en React y Vue.js", "estado": "activa" },
+    { "id": 2, "titulo": "Analista de Datos", "empresa": "Data Solutions", "ubicacion": "Heredia, Costa Rica", "salario": "₡1,000,000", "tipo": "Tiempo completo", "descripcion": "Análisis y visualización de datos para equipos de negocio.", "estado": "activa" }
+  ],
+  "empresas": [
+    { "id": 1, "nombre": "Tech Corp", "contacto": "info@techcorp.com", "telefono": "+1234567890", "direccion": "San José, Costa Rica", "sector": "Tecnología" },
+    { "id": 2, "nombre": "Data Solutions", "contacto": "contacto@datasolutions.com", "telefono": "+50622223333", "direccion": "Heredia, Costa Rica", "sector": "Consultoría" }
+  ],
+  "postulaciones": [],
+  "entrevistas": [],
+  "tareas": []
+}
