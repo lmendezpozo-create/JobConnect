@@ -10,25 +10,64 @@
         },
         {
             "id": "2",
-            "nombre": "Maria",
-            "apellido": "Gomez",
+            "nombre": "Mackenzie",
+            "apellido": "Dern",
             "correo": "[EMAIL_ADDRESS]",
             "contrasena": "[PASSWORD]",
             "perfil": "postulante"
+        },
+        {
+            "id": "3",
+            "nombre": "Ian",
+            "apellido": "Machado Garry",
+            "correo": "[EMAIL_ADDRESS]",
+            "contrasena": "[PASSWORD]",
+            "perfil": "Administrador"
         }
+
     ],
     "entrevistas":[
         {
             "id": "1",
-            "fecha": "2022-01-01",
+            "fecha": "2026-09-09",
             "hora": "10:00",
             "lugar": "Oficina",
             "postulante": "1",
             "vacante": "1"
+        },
+        {
+            "id": "2",
+            "fecha": "2026-09-11",
+            "hora": "12:30",
+            "lugar": "Oficina",
+            "postulante": "2",
+            "vacante": "2"
+        },
+        {
+            "id": "3",
+            "fecha": "2026-09-13",
+            "hora": "03:30",
+            "lugar": "Virtual",
+            "postulante": "3",
+            "vacante": "3"
         }
+
     ],
     "vacantes":[
-        
+        {
+            "id": "1",  
+            "titulo": "Desarrollador Web",
+            "descripcion": "Desarrollador web con experiencia en HTML, CSS y JavaScript",
+            "salario": "1000 colones",
+            "estado": "activo"
+        },
+        {
+            "id": "2",
+            "titulo": "Desarrollador Web",
+            "descripcion": "Desarrollador web con experiencia en HTML, CSS y JavaScript",
+            "salario": "1000 colones",
+            "estado": "activo"
+        }
     ]
 }
 
