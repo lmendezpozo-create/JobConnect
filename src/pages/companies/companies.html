@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Malka Brete | Empresas Clientes - JobConnect</title>
+  
+  <!-- Estilos CSS -->
+  <link rel="stylesheet" href="../../css/baseApi/variables.css">
+  <link rel="stylesheet" href="../../css/componentsApi/glassmorphism.css">
+  <link rel="stylesheet" href="../../css/modulesApi/companies.css">
+</head>
+<body>
+
+  <div class="dashboard-container">
+    
+    <!-- Encabezado Principal y Cierre de Sesión -->
+    <header class="glass-panel header-panel">
+      <div>
+        <h1>Empresas Clientes (/carts)</h1>
+        <p>Panel Interno de Administración — JobConnect</p>
+      </div>
+      <button id="btn-logout" class="glass-btn glass-btn-danger">Cerrar Sesión</button>
+    </header>
+
+    <!-- Formulario CRUD Parametrizado -->
+    <section class="glass-panel">
+      <h2 id="form-title">Registrar Nueva Empresa</h2>
+      <form id="company-form" class="company-form">
+        <input type="hidden" id="company-id">
+
+        <div class="form-grid">
+          <div>
+            <label for="company-userId">ID de Reclutador / Usuario:</label>
+            <input type="number" id="company-userId" class="glass-input" required placeholder="Ej. 5">
+          </div>
+          <div>
+            <label for="company-total">Presupuesto / Valor Total ($):</label>
+            <input type="number" step="0.01" id="company-total" class="glass-input" required placeholder="0.00">
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="glass-btn">Guardar Empresa</button>
+          <button type="button" id="btn-cancel" class="glass-btn glass-btn-danger">Cancelar</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Tabla Dinámica de Empresas -->
+    <section class="glass-panel">
+      <h2>Listado de Empresas Activas</h2>
+      <div class="table-responsive">
+        <table class="glass-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Reclutador Asignado</th>
+              <th>Presupuesto Total</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="companies-table-body">
+            <!-- Se renderiza desde JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Script del Módulo -->
+  <script type="module" src="../../js/modules/companiesUI.js"></script>
+</body>
+</html>
