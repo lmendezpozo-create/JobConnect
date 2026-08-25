@@ -172,8 +172,8 @@ El README del proyecto incluye:
 
 ---
 
-# 10. Observación sobre DummyJSON
+# 10. Observación sobre db.json
 
-DummyJSON simula las operaciones POST, PUT, PATCH y DELETE. Las respuestas de estas operaciones pueden ser exitosas, pero los cambios no se mantienen permanentemente en el servidor.
+Db.json simula las operaciones POST, PUT, PATCH y DELETE. Las respuestas de estas operaciones pueden ser exitosas, pero los cambios no se mantienen permanentemente en el servidor.
 
-Por esta razón, la aplicación utiliza DummyJSON principalmente como servicio de práctica para el consumo de APIs y la implementación de operaciones CRUD.
+Por esta razón, la aplicación utiliza db.json principalmente como servicio de práctica para el consumo de APIs y la implementación de operaciones CRUD.
