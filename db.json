@@ -26,9 +26,9 @@
     {
       "id": 1,
       "userId": 3,
-      "firstName": "Carlos",
+      "firstName": "Aiden",
       "lastName": "Ruiz",
-      "email": "carlos.ruiz@email.com",
+      "email": "aidenmontero27@gmail.com",
       "phone": "+50670001122",
       "status": "activo",
       "habilidades": [
@@ -42,22 +42,30 @@
         {
           "empresa": "Freelance",
           "cargo": "Desarrollador Web",
-          "duracion": "2 años",
-          "descripcion": "Desarrollo de sitios web y aplicaciones SPA"
+          "anios": 0,
+          "descripcion": "Desarrollo de sitios web y aplicaciones SPA, Servicio al cliente"
         }
       ],
       "educacion": [
         {
           "titulo": "Ingeniería en Sistemas",
           "institucion": "Universidad de Costa Rica",
-          "anio": 2021
+          "anio": "2021"
         }
       ],
       "idiomas": [
         "Español",
         "Inglés"
       ],
-      "resumen": "Desarrollador frontend con 2 años de experiencia en React y Node.js"
+      "resumen": "Desarrollador frontend con 2 años de experiencia en React y Node.js",
+      "ubicacion": "san josé",
+      "foto": "",
+      "skills": "JavaScript, React, CSS, HTML, Node.js",
+      "experience": "Freelance|Desarrollador Web||Desarrollo de sitios web y aplicaciones SPA, Servicio al cliente",
+      "education": "Ingeniería en Sistemas|Universidad de Costa Rica|2021",
+      "certificaciones": [
+        "VLA Academy"
+      ]
     },
     {
       "id": 2,
@@ -235,6 +243,20 @@
         "Atención al cliente",
         "Organización"
       ]
+    },
+    {
+      "titulo": "Recursos humanos",
+      "descripcion": "Vacante para recursos humanos",
+      "area": "Servicio al cliente",
+      "skills": [
+        "Ingles",
+        "trabajar bajo presión"
+      ],
+      "experiencia": "6 meses en trabajos que requieren servicio al cliente",
+      "ubicacion": "san josé",
+      "salario": "450000",
+      "estado": "activa",
+      "id": 5
     }
   ],
   "empresas": [
@@ -281,7 +303,7 @@
       "cargo": "Desarrollador Frontend",
       "email": "carlos.ruiz@email.com",
       "fecha": "2026-08-20",
-      "estado": "En revisión",
+      "estado": "rechazado",
       "matchScore": 60
     },
     {
@@ -395,9 +417,19 @@
       "candidatoId": 4,
       "postulacionId": 2,
       "fecha": "2026-08-26T22:22",
+      "estado": "realizada",
+      "notas": "aprobado\n",
+      "id": 5,
+      "resultado": "aceptar"
+    },
+    {
+      "candidato": "María García",
+      "candidatoId": 4,
+      "postulacionId": 2,
+      "fecha": "32026-02-01T20:00",
       "estado": "pendiente",
       "notas": "",
-      "id": 5
+      "id": 6
     }
   ],
   "tareas": [
