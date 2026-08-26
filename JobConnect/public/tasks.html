@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gestión de Tareas del Reclutador" />
+  <title>Tareas | Sistema de Reclutamiento</title>
+
+  <!-- ============================================
+       ESTILOS (orden: base → componentes → página)
+       ============================================ -->
+  <link rel="stylesheet" href="./css/base.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="stylesheet" href="./css/todos.css" />
+</head>
+
+<body>
+
+  <!-- ==================================================
+       HEADER: Navegación principal
+       ================================================== -->
+  <header class="header" role="banner">
+    <nav class="header__nav" aria-label="Navegación principal">
+      <a href="./index.html" class="header__logo">
+        <span class="header__logo-icon" aria-hidden="true">📋</span>
+        <span class="header__logo-text">Reclutamiento</span>
+      </a>
+
+      <ul class="header__menu" role="menubar">
+        <li class="header__menu-item" role="none">
+          <a href="./index.html" class="header__menu-link" role="menuitem">Inicio</a>
+        </li>
+        <li class="header__menu-item" role="none">
+          <a href="./interviews.html" class="header__menu-link" role="menuitem">Entrevistas</a>
+        </li>
+        <li class="header__menu-item" role="none">
+          <a href="./todos.html"
+             class="header__menu-link header__menu-link--active"
+             role="menuitem"
+             aria-current="page">
+            Tareas
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ==================================================
+       MAIN: Contenido principal
+       ================================================== -->
+  <main class="todos" role="main" id="todos-app">
+
+    <!-- ── Encabezado de sección ── -->
+    <header class="todos__header">
+      <h1 class="todos__title">Tareas del Reclutador</h1>
+      <button
+        type="button"
+        class="btn btn--primary"
+        id="btn-open-create-modal"
+        data-action="open-modal"
+        data-mode="create"
+        aria-haspopup="dialog"
+      >
+        <span aria-hidden="true">+</span> Nueva Tarea
+      </button>
+    </header>
+
+    <!-- ── Alerta de error global ── -->
+    <div
+      class="todos__error alert alert--error"
+      id="error-banner"
+      role="alert"
+      aria-live="assertive"
+      hidden
+    >
+      <p class="alert__message" id="error-message"></p>
+      <button
+        type="button"
+        class="alert__close-btn"
+        id="btn-close-error"
+        data-action="clear-error"
+        aria-label="Cerrar mensaje de error"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- ── Indicador de carga ── -->
+    <div
+      class="todos__loading"
+      id="loading-indicator"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Cargando tareas…</p>
+    </div>
+
+    <!-- ── Estado vacío ── -->
+    <section
+      class="todos__empty"
+      id="empty-state"
+      aria-label="Sin tareas registradas"
+      hidden
+    >
+      <p class="todos__empty-icon" aria-hidden="true">✅</p>
+      <p class="todos__empty-text">No hay tareas registradas</p>
+    </section>
+
+    <!-- ── Lista de tareas ──
+         El JS genera una <article> por cada item de /all.
+         data-entity="task" identifica el tipo de entidad. -->
+    <section
+      class="todos__list"
+      id="todos-list"
+      data-entity="task"
+      aria-label="Listado de tareas del reclutador"
+    >
+      <!-- ═══════════════════════════════════════════════
+           PLANTILLA DE TARJETA DE TAREA (referencia)
+           El JS genera esta estructura dinámicamente.
+           Se incluye como comentario para documentar
+           los data-attributes esperados.
+           ═══════════════════════════════════════════════ -->
+      <!--
+      <article class="todo-card todo-card--priority-high" data-id="1" data-entity="task">
+        <div class="todo-card__content">
+          <div class="todo-card__header">
+            <h3 class="todo-card__title">Título de la tarea</h3>
+            <span class="todo-card__priority-badge todo-card__priority-badge--high">Alta</span>
+          </div>
+          <p class="todo-card__description">Descripción…</p>
+          <div class="todo-card__meta">
+            <span class="todo-card__date">Vence: 28/08/2026</span>
+            <span class="todo-card__status-badge todo-card__status-badge--pending">Pendiente</span>
+          </div>
+        </div>
+        <div class="todo-card__actions">
+          <select class="todo-card__status-select" data-field="status" aria-label="Cambiar estado">
+            <option value="pending">Pendiente</option>
+            <option value="in-progress">En Progreso</option>
+            <option value="completed">Completada</option>
+            <option value="cancelled">Cancelada</option>
+          </select>
+          <button class="btn btn--small" data-action="edit" data-id="1">Editar</button>
+          <button class="btn btn--danger btn--small" data-action="delete" data-id="1">Eliminar</button>
+        </div>
+      </article>
+      -->
+    </section>
+
+  </main>
+
+  <!-- ==================================================
+       MODAL: Formulario Crear / Editar Tarea
+       data-mode="create|edit" controla si el submit
+       ejecuta POST (crear) o PUT (edición completa).
+       ================================================== -->
+  <div
+    class="modal"
+    id="todo-modal"
+    data-mode="create"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    hidden
+  >
+    <div class="modal__overlay" id="modal-overlay" data-action="close-modal"></div>
+
+    <div class="modal__container">
+      <header class="modal__header">
+        <h2 class="modal__title" id="modal-title">Nueva Tarea</h2>
+        <button
+          type="button"
+          class="modal__close-btn"
+          id="btn-close-modal"
+          data-action="close-modal"
+          aria-label="Cerrar formulario"
+        >
+          ✕
+        </button>
+      </header>
+
+      <div class="modal__body">
+        <!-- ── Formulario de Tarea ──
+             En modo "edit": el JS ejecuta PUT /all/:id (edición completa)
+             En modo "create": el JS ejecuta POST /all -->
+        <form
+          class="todo-form"
+          id="todo-form"
+          data-entity="task"
+          novalidate
+        >
+          <!-- ID oculto para modo edición -->
+          <input type="hidden" name="id" id="field-id" value="" />
+
+          <!-- Título -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-title">
+              Título <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-group__input"
+              id="field-title"
+              name="title"
+              placeholder="Ingresa el título de la tarea"
+              required
+              minlength="3"
+              aria-required="true"
+              aria-describedby="error-title"
+            />
+            <span class="form-group__error" id="error-title" role="alert" hidden></span>
+          </div>
+
+          <!-- Descripción -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-description">Descripción</label>
+            <textarea
+              class="form-group__textarea"
+              id="field-description"
+              name="description"
+              rows="4"
+              placeholder="Describe la tarea (opcional)"
+            ></textarea>
+          </div>
+
+          <!-- Fila: Prioridad + Fecha -->
+          <div class="form-row">
+            <!-- Prioridad -->
+            <div class="form-group">
+              <label class="form-group__label" for="field-priority">Prioridad</label>
+              <select
+                class="form-group__select"
+                id="field-priority"
+                name="priority"
+              >
+                <option value="low">Baja</option>
+                <option value="medium" selected>Media</option>
+                <option value="high">Alta</option>
+              </select>
+            </div>
+
+            <!-- Fecha de vencimiento -->
+            <div class="form-group">
+              <label class="form-group__label" for="field-dueDate">
+                Fecha de vencimiento
+                <span class="form-group__required" aria-hidden="true">*</span>
+              </label>
+              <input
+                type="date"
+                class="form-group__input"
+                id="field-dueDate"
+                name="dueDate"
+                required
+                aria-required="true"
+                aria-describedby="error-dueDate"
+              />
+              <span class="form-group__error" id="error-dueDate" role="alert" hidden></span>
+            </div>
+          </div>
+
+          <!-- Estado (visible solo en modo edición) -->
+          <div class="form-group" id="status-field-group" hidden>
+            <label class="form-group__label" for="field-status">Estado</label>
+            <select
+              class="form-group__select"
+              id="field-status"
+              name="status"
+            >
+              <option value="pending">Pendiente</option>
+              <option value="in-progress">En Progreso</option>
+              <option value="completed">Completada</option>
+              <option value="cancelled">Cancelada</option>
+            </select>
+          </div>
+
+          <!-- Acciones -->
+          <footer class="form-actions">
+            <button
+              type="button"
+              class="btn btn--secondary"
+              data-action="close-modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn btn--primary"
+              id="btn-submit-form"
+            >
+              Crear
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================
+       CONFIRM DIALOG: Eliminación de Tarea
+       El JS ejecuta DELETE /all/:id al confirmar.
+       ================================================== -->
+  <div
+    class="confirm-dialog"
+    id="delete-dialog"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="delete-dialog-title"
+    aria-describedby="delete-dialog-message"
+    hidden
+  >
+    <div class="confirm-dialog__overlay" data-action="cancel-delete"></div>
+
+    <div class="confirm-dialog__container">
+      <header class="confirm-dialog__header">
+        <h3 class="confirm-dialog__title" id="delete-dialog-title">
+          Eliminar Tarea
+        </h3>
+      </header>
+
+      <div class="confirm-dialog__body">
+        <p class="confirm-dialog__message" id="delete-dialog-message"></p>
+      </div>
+
+      <footer class="confirm-dialog__footer">
+        <button
+          type="button"
+          class="btn btn--secondary"
+          data-action="cancel-delete"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn--danger"
+          id="btn-confirm-delete"
+          data-action="confirm-delete"
+        >
+          Eliminar
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ==================================================
+       FOOTER
+       ================================================== -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__text">
+      © 2026 Sistema de Reclutamiento — Módulo de Tareas
+    </p>
+  </footer>
+
+  <!-- ==================================================
+       SCRIPTS (módulos ES6)
+       ================================================== -->
+  <script type="module" src="./js/services/api.js"></script>
+  <script type="module" src="./js/services/recruiterTaskService.js"></script>
+  <script type="module" src="./js/hooks/useCrud.js"></script>
+  <script type="module" src="./js/components/modal.js"></script>
+  <script type="module" src="./js/components/confirmDialog.js"></script>
+  <script type="module" src="./js/pages/todos.controller.js"></script>
+
+</body>
+</html>

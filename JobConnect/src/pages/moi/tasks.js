@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import * as todoService from '../../services/';
+import * as todoService from '../../services/moi/taskService.js';
 import { useFetch } from '../../hooks/useFetch';
-import './Todos.css';
+import './tasks.css';
 
 const TodoForm = ({ initialData, onSubmit, loading }) => {
   const [form, setForm] = useState(initialData || {

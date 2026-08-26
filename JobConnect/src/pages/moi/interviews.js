@@ -1,8 +1,8 @@
 // src/pages/Interviews/Interviews.js
 import React, { useState, useEffect } from 'react';
-import * as interviewService from '../../services/interviewService';
+import * as interviewService from '../../services/moi/interviewServices.js';
 import { useFetch } from '../../hooks/useFetch';
-import './Interviews.css';
+import './interviews.css';
 
 const InterviewForm = ({ initialData, onSubmit, loading }) => {
   const [form, setForm] = useState(initialData || {
