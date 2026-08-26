@@ -2,10 +2,14 @@
 // Orquestador de la página interviews.html.
 // Gestiona: listado, estado vacío, indicador de carga, alerta de error,
 // modal crear/editar y diálogo de confirmación de borrado.
-// Recurso esperado por el server: /comments.
+// Recurso esperado por el server: /entrevistas (db.json), con campos
+// fecha, hora, lugar, postulante (id) y vacante (id).
+// Los catálogos /usuarios y /vacantes permiten mostrar el nombre del
+// postulante y el título de la vacante en las tarjetas.
 
 import * as service from '../services/interviewService.js';
 import { useCrud } from '../hooks/useCrud.js';
+import { fetchApi } from '../services/api.js';
 import { openModal, closeModal } from '../components/modal.js';
 import { askConfirm } from '../components/confirmDialog.js';
 
@@ -25,25 +29,23 @@ const btnOpenCreate = document.querySelector('#btn-open-create-modal');
 const deleteDialog = document.querySelector('#delete-dialog');
 
 const fieldId = form?.querySelector('#field-id');
-const fieldCandidate = form?.querySelector('#field-candidate');
-const fieldPosition = form?.querySelector('#field-position');
-const fieldDate = form?.querySelector('#field-date');
-const fieldStatus = form?.querySelector('#field-status');
-const fieldNotes = form?.querySelector('#field-notes');
+const fieldFecha = form?.querySelector('#field-fecha');
+const fieldHora = form?.querySelector('#field-hora');
+const fieldLugar = form?.querySelector('#field-lugar');
+const fieldPostulante = form?.querySelector('#field-postulante');
+const fieldVacante = form?.querySelector('#field-vacante');
 
-const errorCandidate = document.querySelector('#error-candidate');
-const errorPosition = document.querySelector('#error-position');
-const errorDate = document.querySelector('#error-date');
+const errorFecha = document.querySelector('#error-fecha');
+const errorHora = document.querySelector('#error-hora');
+const errorLugar = document.querySelector('#error-lugar');
+const errorPostulante = document.querySelector('#error-postulante');
+const errorVacante = document.querySelector('#error-vacante');
+
+// ── Catálogos para resolver nombres ────────────────────────────────
+let usuarios = [];
+let vacantes = [];
 
 // ── Utilidades de presentación ─────────────────────────────────────
-const STATUS_ORDER = ['pending', 'scheduled', 'completed', 'cancelled'];
-const STATUS_LABELS = {
-  pending: 'Pendiente',
-  scheduled: 'Programada',
-  completed: 'Completada',
-  cancelled: 'Cancelada',
-};
-
 const escapeHtml = (value = '') =>
   String(value).replace(/[&<>"']/g, (c) => ({
     '&': '&amp;',
@@ -53,13 +55,21 @@ const escapeHtml = (value = '') =>
     "'": '&#39;',
   }[c]));
 
-const formatDate = (value) => {
+const formatFecha = (value) => {
   if (!value) return 'Pendiente';
-  const d = new Date(value);
+  const d = new Date(`${value}T00:00:00`);
   return Number.isNaN(d.getTime()) ? value : d.toLocaleDateString();
 };
 
-const statusLabel = (s) => STATUS_LABELS[s] || s;
+const postulanteName = (id) => {
+  const u = usuarios.find((x) => String(x.id) === String(id));
+  return u ? `${u.nombre || ''} ${u.apellido || ''}`.trim() : id;
+};
+
+const vacanteName = (id) => {
+  const v = vacantes.find((x) => String(x.id) === String(id));
+  return v ? v.titulo : id;
+};
 
 let items = [];
 
@@ -82,9 +92,35 @@ const setFieldError = (el, msg) => {
   }
 };
 
+// ── Llenado de los selects con los catálogos ──────────────────────
+const fillSelect = (select, placeholder, options, labelFn) => {
+  if (!select) return;
+  select.length = 0;
+  if (placeholder) select.appendChild(new Option(placeholder, ''));
+  options.forEach((o) => select.appendChild(new Option(labelFn(o), o.id)));
+};
+
+const loadCatalogs = async () => {
+  try {
+    const [users, jobs] = await Promise.all([fetchApi('/usuarios'), fetchApi('/vacantes')]);
+    usuarios = users || [];
+    vacantes = jobs || [];
+    fillSelect(
+      fieldPostulante,
+      'Selecciona un postulante',
+      usuarios,
+      (u) => `${u.nombre || ''} ${u.apellido || ''}`.trim() || u.id
+    );
+    fillSelect(fieldVacante, 'Selecciona una vacante', vacantes, (v) => v.titulo || v.id);
+  } catch (err) {
+    // Si los catálogos fallan, el resto del CRUD sigue funcionando.
+    console.error('No se pudieron cargar los catálogos', err);
+  }
+};
+
 // ── Render del listado ─────────────────────────────────────────────
-const render = (items) => {
-  items = items || [];
+const render = (list) => {
+  items = list || [];
   if (loadingEl) loadingEl.hidden = true;
   if (!listEl) return;
   listEl.innerHTML = '';
@@ -98,17 +134,13 @@ const render = (items) => {
 
     article.innerHTML = `
       <div class="interview-card__content">
-        <h3 class="interview-card__candidate">${escapeHtml(item.candidate)}</h3>
-        <p class="interview-card__position">${escapeHtml(item.position)}</p>
-        <p class="interview-card__date">Fecha: ${formatDate(item.date)}</p>
-        <p class="interview-card__notes">${escapeHtml(item.notes || '')}</p>
+        <h3 class="interview-card__candidate">${escapeHtml(postulanteName(item.postulante))}</h3>
+        <p class="interview-card__position">${escapeHtml(vacanteName(item.vacante))}</p>
+        <p class="interview-card__date">Fecha: ${formatFecha(item.fecha)}</p>
+        <p class="interview-card__hora">Hora: ${escapeHtml(item.hora || '')}</p>
+        <p class="interview-card__lugar">Lugar: ${escapeHtml(item.lugar || '')}</p>
       </div>
       <div class="interview-card__actions">
-        <select class="interview-card__status" data-field="status" aria-label="Cambiar estado">
-          ${STATUS_ORDER.map((s) =>
-            `<option value="${s}" ${s === item.status ? 'selected' : ''}>${statusLabel(s)}</option>`
-          ).join('')}
-        </select>
         <button class="btn btn--small" data-action="edit">Editar</button>
         <button class="btn btn--danger btn--small" data-action="delete">Eliminar</button>
       </div>
@@ -119,9 +151,11 @@ const render = (items) => {
 // ── Modal: relleno según modo ──────────────────────────────────────
 const resetForm = () => {
   form?.reset();
-  setFieldError(errorCandidate, '');
-  setFieldError(errorPosition, '');
-  setFieldError(errorDate, '');
+  setFieldError(errorFecha, '');
+  setFieldError(errorHora, '');
+  setFieldError(errorLugar, '');
+  setFieldError(errorPostulante, '');
+  setFieldError(errorVacante, '');
   if (submitBtn) {
     submitBtn.textContent = 'Crear';
     submitBtn.disabled = false;
@@ -141,27 +175,35 @@ const openEdit = (item) => {
   if (modalTitle) modalTitle.textContent = 'Editar Entrevista';
   if (submitBtn) submitBtn.textContent = 'Actualizar';
   if (fieldId) fieldId.value = item.id;
-  if (fieldCandidate) fieldCandidate.value = item.candidate || '';
-  if (fieldPosition) fieldPosition.value = item.position || '';
-  if (fieldDate) fieldDate.value = item.date || '';
-  if (fieldStatus) fieldStatus.value = item.status || 'pending';
-  if (fieldNotes) fieldNotes.value = item.notes || '';
+  if (fieldFecha) fieldFecha.value = item.fecha || '';
+  if (fieldHora) fieldHora.value = item.hora || '';
+  if (fieldLugar) fieldLugar.value = item.lugar || '';
+  if (fieldPostulante) fieldPostulante.value = item.postulante ?? '';
+  if (fieldVacante) fieldVacante.value = item.vacante ?? '';
   openModal(modal);
 };
 
 // ── Validación del formulario ──────────────────────────────────────
 const validate = () => {
   let ok = true;
-  if (!fieldCandidate?.value.trim()) {
-    setFieldError(errorCandidate, 'El candidato es obligatorio.');
+  if (!fieldFecha?.value) {
+    setFieldError(errorFecha, 'La fecha es obligatoria.');
     ok = false;
   }
-  if (!fieldPosition?.value.trim()) {
-    setFieldError(errorPosition, 'La posición es obligatoria.');
+  if (!fieldHora?.value) {
+    setFieldError(errorHora, 'La hora es obligatoria.');
     ok = false;
   }
-  if (!fieldDate?.value) {
-    setFieldError(errorDate, 'La fecha es obligatoria.');
+  if (!fieldLugar?.value.trim()) {
+    setFieldError(errorLugar, 'El lugar es obligatorio.');
+    ok = false;
+  }
+  if (!fieldPostulante?.value) {
+    setFieldError(errorPostulante, 'Selecciona un postulante.');
+    ok = false;
+  }
+  if (!fieldVacante?.value) {
+    setFieldError(errorVacante, 'Selecciona una vacante.');
     ok = false;
   }
   return ok;
@@ -174,11 +216,11 @@ if (form) {
 
     const id = fieldId?.value;
     const data = {
-      candidate: fieldCandidate.value.trim(),
-      position: fieldPosition.value.trim(),
-      date: fieldDate.value,
-      status: fieldStatus?.value || 'pending',
-      notes: fieldNotes?.value.trim() || '',
+      fecha: fieldFecha.value,
+      hora: fieldHora.value,
+      lugar: fieldLugar.value.trim(),
+      postulante: fieldPostulante.value,
+      vacante: fieldVacante.value,
     };
 
     if (submitBtn) submitBtn.disabled = true;
@@ -197,14 +239,17 @@ if (form) {
     }
   });
 
-  // Limpiar errores de campo al escribir
+  // Limpiar errores de campo al escribir/cambiar
   [
-    ['#field-candidate', errorCandidate],
-    ['#field-position', errorPosition],
-    ['#field-date', errorDate],
+    ['#field-fecha', errorFecha],
+    ['#field-hora', errorHora],
+    ['#field-lugar', errorLugar],
+    ['#field-postulante', errorPostulante],
+    ['#field-vacante', errorVacante],
   ].forEach(([sel, el]) => {
     const input = form.querySelector(sel);
     input?.addEventListener('input', () => setFieldError(el, ''));
+    input?.addEventListener('change', () => setFieldError(el, ''));
   });
 }
 
@@ -228,7 +273,7 @@ listEl?.addEventListener('click', async (e) => {
   } else if (actionBtn.dataset.action === 'delete') {
     const item = items.find((i) => String(i.id) === String(id));
     const message = item
-      ? `¿Eliminar la entrevista de "${item.candidate}"?\nEsta acción no se puede deshacer.`
+      ? `¿Eliminar la entrevista de "${postulanteName(item.postulante)}"?\nEsta acción no se puede deshacer.`
       : '¿Eliminar esta entrevista?';
     const confirmed = await askConfirm({ dialog: deleteDialog, message });
     if (confirmed) {
@@ -242,21 +287,6 @@ listEl?.addEventListener('click', async (e) => {
   }
 });
 
-listEl?.addEventListener('change', async (e) => {
-  const select = e.target.closest('[data-field="status"]');
-  if (!select) return;
-  const card = e.target.closest('.interview-card');
-  const id = card?.dataset.id;
-  if (!id) return;
-  try {
-    await update(id, { status: select.value });
-    await load();
-  } catch {
-    /* error ya notificado; recarga para restablecer el select */
-    await load();
-  }
-});
-
 // ── Instancia CRUD + carga inicial ─────────────────────────────────
 const { load, create, update, remove } = useCrud({
   service,
@@ -266,5 +296,6 @@ const { load, create, update, remove } = useCrud({
 
 (async function init() {
   if (loadingEl) loadingEl.hidden = false;
+  await loadCatalogs();
   await load();
 })();

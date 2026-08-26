@@ -1,16 +1,16 @@
 // src/services/interviewService.js
 import { fetchApi } from './fetch.js';
 
-const RESOURCE = '/comments';
+const RESOURCE = '/entrevistas';
 
-// GET /comments – Obtener todas las entrevistas
+// GET /entrevistas – Obtener todas las entrevistas
 export const getInterviews = async (params = {}) => {
   const queryString = new URLSearchParams(params).toString();
   const endpoint = queryString ? `${RESOURCE}?${queryString}` : RESOURCE;
   return fetchApi(endpoint);
 };
 
-// POST /comments – Crear una nueva entrevista
+// POST /entrevistas – Crear una nueva entrevista
 export const createInterview = async (data) => {
   return fetchApi(RESOURCE, {
     method: 'POST',
@@ -18,7 +18,7 @@ export const createInterview = async (data) => {
   });
 };
 
-// PATCH /comments/:id – Actualizar parcialmente
+// PATCH /entrevistas/:id – Actualizar parcialmente
 export const updateInterview = async (id, data) => {
   return fetchApi(`${RESOURCE}/${id}`, {
     method: 'PATCH',
@@ -26,7 +26,7 @@ export const updateInterview = async (id, data) => {
   });
 };
 
-// DELETE /comments/:id – Eliminar
+// DELETE /entrevistas/:id – Eliminar
 export const deleteInterview = async (id) => {
   return fetchApi(`${RESOURCE}/${id}`, {
     method: 'DELETE',

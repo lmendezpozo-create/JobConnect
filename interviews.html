@@ -115,7 +115,7 @@
     </section>
 
     <!-- ── Lista de entrevistas ──
-         El JS itera sobre el array de /comments y genera
+         El JS itera sobre el array de /entrevistas y genera
          una <article> por cada registro dentro de este contenedor.
          data-entity="interview" permite al JS identificar el tipo. -->
     <section
@@ -132,18 +132,13 @@
       <!--
       <article class="interview-card" data-id="1" data-entity="interview">
         <div class="interview-card__content">
-          <h3 class="interview-card__candidate">Nombre Candidato</h3>
-          <p class="interview-card__position">Posición</p>
-          <p class="interview-card__date">Fecha: 01/09/2026</p>
-          <p class="interview-card__notes">Notas opcionales…</p>
+          <h3 class="interview-card__candidate">Nombre del Postulante</h3>
+          <p class="interview-card__position">Desarrollador Web</p>
+          <p class="interview-card__date">Fecha: 09/09/2026</p>
+          <p class="interview-card__hora">Hora: 10:00</p>
+          <p class="interview-card__lugar">Lugar: Oficina</p>
         </div>
         <div class="interview-card__actions">
-          <select class="interview-card__status" data-field="status" aria-label="Cambiar estado">
-            <option value="pending">Pendiente</option>
-            <option value="scheduled">Programada</option>
-            <option value="completed">Completada</option>
-            <option value="cancelled">Cancelada</option>
-          </select>
           <button class="btn btn--small" data-action="edit" data-id="1">Editar</button>
           <button class="btn btn--danger btn--small" data-action="delete" data-id="1">Eliminar</button>
         </div>
@@ -198,85 +193,88 @@
                El JS lo setea al abrir el modal en modo "edit". -->
           <input type="hidden" name="id" id="field-id" value="" />
 
-          <!-- Candidato -->
-          <div class="form-group">
-            <label class="form-group__label" for="field-candidate">
-              Candidato <span class="form-group__required" aria-hidden="true">*</span>
-            </label>
-            <input
-              type="text"
-              class="form-group__input"
-              id="field-candidate"
-              name="candidate"
-              placeholder="Nombre completo del candidato"
-              required
-              autocomplete="name"
-              aria-required="true"
-              aria-describedby="error-candidate"
-            />
-            <span class="form-group__error" id="error-candidate" role="alert" hidden></span>
-          </div>
-
-          <!-- Posición -->
-          <div class="form-group">
-            <label class="form-group__label" for="field-position">
-              Posición <span class="form-group__required" aria-hidden="true">*</span>
-            </label>
-            <input
-              type="text"
-              class="form-group__input"
-              id="field-position"
-              name="position"
-              placeholder="Ej. Desarrollador Frontend"
-              required
-              aria-required="true"
-              aria-describedby="error-position"
-            />
-            <span class="form-group__error" id="error-position" role="alert" hidden></span>
-          </div>
-
           <!-- Fecha -->
           <div class="form-group">
-            <label class="form-group__label" for="field-date">
+            <label class="form-group__label" for="field-fecha">
               Fecha <span class="form-group__required" aria-hidden="true">*</span>
             </label>
             <input
               type="date"
               class="form-group__input"
-              id="field-date"
-              name="date"
+              id="field-fecha"
+              name="fecha"
               required
               aria-required="true"
-              aria-describedby="error-date"
+              aria-describedby="error-fecha"
             />
-            <span class="form-group__error" id="error-date" role="alert" hidden></span>
+            <span class="form-group__error" id="error-fecha" role="alert" hidden></span>
           </div>
 
-          <!-- Estado -->
+          <!-- Hora -->
           <div class="form-group">
-            <label class="form-group__label" for="field-status">Estado</label>
+            <label class="form-group__label" for="field-hora">
+              Hora <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="time"
+              class="form-group__input"
+              id="field-hora"
+              name="hora"
+              required
+              aria-required="true"
+              aria-describedby="error-hora"
+            />
+            <span class="form-group__error" id="error-hora" role="alert" hidden></span>
+          </div>
+
+          <!-- Lugar -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-lugar">
+              Lugar <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-group__input"
+              id="field-lugar"
+              name="lugar"
+              placeholder="Ej. Oficina, Virtual, Sala de juntas…"
+              required
+              aria-required="true"
+              aria-describedby="error-lugar"
+            />
+            <span class="form-group__error" id="error-lugar" role="alert" hidden></span>
+          </div>
+
+          <!-- Postulante -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-postulante">
+              Postulante <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
             <select
               class="form-group__select"
-              id="field-status"
-              name="status"
-            >
-              <option value="pending" selected>Pendiente</option>
-              <option value="scheduled">Programada</option>
-              <option value="completed">Completada</option>
-              <option value="cancelled">Cancelada</option>
-            </select>
+              id="field-postulante"
+              name="postulante"
+              required
+              aria-required="true"
+              aria-describedby="error-postulante"
+            ></select>
+            <span class="form-group__error" id="error-postulante" role="alert" hidden></span>
           </div>
 
-          <!-- Notas -->
+          <!-- Vacante -->
           <div class="form-group">
-            <label class="form-group__label" for="field-notes">Notas</label>
-            <textarea
-              class="form-group__textarea"
-              id="field-notes"
-              name="notes"
-              rows="4"
-              placeholder="Observaciones sobre la entrevista…"
-            ></textarea>
+            <label class="form-group__label" for="field-vacante">
+              Vacante <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <select
+              class="form-group__select"
+              id="field-vacante"
+              name="vacante"
+              required
+              aria-required="true"
+              aria-describedby="error-vacante"
+            ></select>
+            <span class="form-group__error" id="error-vacante" role="alert" hidden></span>
           </div>
 
           <!-- Acciones del formulario -->
@@ -304,7 +302,7 @@
   <!-- ==================================================
        CONFIRM DIALOG: Eliminación de Entrevista
        El JS muestra este diálogo al hacer clic en "Eliminar"
-       y ejecuta DELETE /comments/:id al confirmar.
+       y ejecuta DELETE /entrevistas/:id al confirmar.
        ================================================== -->
   <div
     class="confirm-dialog"

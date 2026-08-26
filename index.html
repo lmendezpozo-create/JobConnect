@@ -3,19 +3,65 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Sistema de Reclutamiento </title>
-  <!-- Font Awesome (iconos) -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Estilos globales -->
+  <meta name="description" content="Panel central del Sistema de Reclutamiento de JobConnect">
+  <title>Sistema de Reclutamiento</title>
+
+  <!-- ============================================
+       ESTILOS (hoja global compartida)
+       ============================================ -->
   <link rel="stylesheet" href="./src/style.css" />
 </head>
-<body>
-  <div id="app"></div>
 
-  <!-- Cargar el módulo principal (main.js) con type="module" -->
-  <script type="module">
-    // Importamos el orquestador que inicia la aplicación
-    import './src/main.js';
-  </script>
+<body>
+
+  <!-- ==================================================
+       HEADER: Navegación principal (la misma en todo el sitio)
+       ================================================== -->
+  <header class="header" role="banner">
+    <nav class="header__nav" aria-label="Navegación principal">
+      <a href="./index.html" class="header__logo">
+        <span class="header__logo-icon" aria-hidden="true">📋</span>
+        <span class="header__logo-text">Reclutamiento</span>
+      </a>
+
+      <ul class="header__menu" role="menubar">
+        <li class="header__menu-item" role="none">
+          <a href="./index.html"
+             class="header__menu-link header__menu-link--active"
+             role="menuitem"
+             aria-current="page">
+            Inicio
+          </a>
+        </li>
+        <li class="header__menu-item" role="none">
+          <a href="./interviews.html" class="header__menu-link" role="menuitem">Entrevistas</a>
+        </li>
+        <li class="header__menu-item" role="none">
+          <a href="./todos.html" class="header__menu-link" role="menuitem">Tareas</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ==================================================
+       MAIN: Contenido principal (lo renderiza source/main.js)
+       ================================================== -->
+  <main class="dashboard" role="main" id="app">
+    <!-- El módulo main.js inyecta aquí la portada (héroe + módulos) -->
+  </main>
+
+  <!-- ==================================================
+       FOOTER
+       ================================================== -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__text">
+      © 2026 Sistema de Reclutamiento — Panel Central
+    </p>
+  </footer>
+
+  <!-- ==================================================
+       SCRIPTS (módulos ES6)
+       ================================================== -->
+  <script type="module" src="./src/main.js"></script>
 </body>
 </html>

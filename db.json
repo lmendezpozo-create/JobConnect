@@ -1,77 +1,161 @@
 {
-    "usuarios":[
-        {
-            "id": "1",
-            "nombre": "Juan",
-            "apellido": "Perez",
-            "correo": "[EMAIL_ADDRESS]",
-            "contrasena": "[PASSWORD]",
-            "perfil": "Administrador"
-        },
-        {
-            "id": "2",
-            "nombre": "Mackenzie",
-            "apellido": "Dern",
-            "correo": "[EMAIL_ADDRESS]",
-            "contrasena": "[PASSWORD]",
-            "perfil": "postulante"
-        },
-        {
-            "id": "3",
-            "nombre": "Ian",
-            "apellido": "Machado Garry",
-            "correo": "[EMAIL_ADDRESS]",
-            "contrasena": "[PASSWORD]",
-            "perfil": "Administrador"
-        }
-
-    ],
-    "entrevistas":[
-        {
-            "id": "1",
-            "fecha": "2026-09-09",
-            "hora": "10:00",
-            "lugar": "Oficina",
-            "postulante": "1",
-            "vacante": "1"
-        },
-        {
-            "id": "2",
-            "fecha": "2026-09-11",
-            "hora": "12:30",
-            "lugar": "Oficina",
-            "postulante": "2",
-            "vacante": "2"
-        },
-        {
-            "id": "3",
-            "fecha": "2026-09-13",
-            "hora": "03:30",
-            "lugar": "Virtual",
-            "postulante": "3",
-            "vacante": "3"
-        }
-
-    ],
-    "vacantes":[
-        {
-            "id": "1",  
-            "titulo": "Desarrollador Web",
-            "descripcion": "Desarrollador web con experiencia en HTML, CSS y JavaScript",
-            "salario": "1000 colones",
-            "estado": "activo"
-        },
-        {
-            "id": "2",
-            "titulo": "Desarrollador Web",
-            "descripcion": "Desarrollador web con experiencia en HTML, CSS y JavaScript",
-            "salario": "1000 colones",
-            "estado": "activo"
-        }
-    ]
+  "usuarios": [
+    {
+      "id": "1",
+      "nombre": "Juan",
+      "apellido": "Perez",
+      "correo": "[EMAIL_ADDRESS]",
+      "contrasena": "[PASSWORD]",
+      "perfil": "Administrador"
+    },
+    {
+      "id": "2",
+      "nombre": "Mackenzie",
+      "apellido": "Dern",
+      "correo": "[EMAIL_ADDRESS]",
+      "contrasena": "[PASSWORD]",
+      "perfil": "postulante"
+    },
+    {
+      "id": "3",
+      "nombre": "Ian",
+      "apellido": "Machado Garry",
+      "correo": "[EMAIL_ADDRESS]",
+      "contrasena": "[PASSWORD]",
+      "perfil": "Administrador"
+    }
+  ],
+  "entrevistas": [
+    {
+      "id": "1",
+      "fecha": "2026-09-09",
+      "hora": "10:00",
+      "lugar": "Oficina",
+      "postulante": "1",
+      "vacante": "1"
+    },
+    {
+      "id": "2",
+      "fecha": "2026-09-11",
+      "hora": "12:30",
+      "lugar": "Oficina",
+      "postulante": "2",
+      "vacante": "2"
+    },
+    {
+      "id": "3",
+      "fecha": "2026-09-13",
+      "hora": "03:30",
+      "lugar": "Virtual",
+      "postulante": "3",
+      "vacante": "3"
+    }
+  ],
+  "vacantes": [
+    {
+      "id": "1",
+      "titulo": "Desarrollador Web",
+      "descripcion": "Desarrollador web con experiencia en HTML, CSS y JavaScript",
+      "salario": "1000 colones",
+      "estado": "activo"
+    },
+    {
+      "id": "2",
+      "titulo": "Desarrollador Web",
+      "descripcion": "Desarrollador web con experiencia en HTML, CSS y JavaScript",
+      "salario": "1000 colones",
+      "estado": "activo"
+    },
+    {
+      "id": "3",
+      "titulo": "Analista de Datos",
+      "descripcion": "Analista de datos con experiencia en BigQuery y Python",
+      "salario": "1500 colones",
+      "estado": "activo"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "candidate": "María López",
+      "position": "Diseñadora UX/UI",
+      "date": "2026-09-01",
+      "status": "scheduled",
+      "notes": "Primera entrevista técnica. Tiene buen portafolio."
+    },
+    {
+      "id": "2",
+      "candidate": "Carlos Mendoza",
+      "position": "Desarrollador JavaScript",
+      "date": "2026-09-03",
+      "status": "pending",
+      "notes": "Confirmar disponibilidad horaria para la segunda etapa."
+    },
+    {
+      "id": "3",
+      "candidate": "Andrea Rojas",
+      "position": "Analista de Recursos Humanos",
+      "date": "2026-09-05",
+      "status": "completed",
+      "notes": "Excelente manejo de entrevistas y evaluaciones."
+    },
+    {
+      "id": "4",
+      "candidate": "Pedro Salas",
+      "position": "Ingeniero de Datos",
+      "date": "2026-09-08",
+      "status": "cancelled",
+      "notes": "El candidato rechazó la oferta por motivos personales."
+    },
+    {
+      "id": "5",
+      "candidate": "Fernanda Castro",
+      "position": "Community Manager",
+      "date": "2026-09-10",
+      "status": "scheduled",
+      "notes": "Evaluar experiencia en campañas de reclutamiento digital."
+    }
+  ],
+  "all": [
+    {
+      "id": "1",
+      "title": "Revisar curriculums recibidos",
+      "description": "Leer y filtrar los CVs enviados para la vacante de Desarrollador Web.",
+      "priority": "high",
+      "dueDate": "2026-09-02",
+      "status": "in-progress"
+    },
+    {
+      "id": "2",
+      "title": "Programar entrevistas iniciales",
+      "description": "Coordinar horarios con los postulantes preseleccionados.",
+      "priority": "high",
+      "dueDate": "2026-09-04",
+      "status": "pending"
+    },
+    {
+      "id": "3",
+      "title": "Actualizar base de datos de candidatos",
+      "description": "Registrar los resultados de las evaluaciones en el sistema.",
+      "priority": "medium",
+      "dueDate": "2026-09-06",
+      "status": "pending"
+    },
+    {
+      "id": "4",
+      "title": "Enviar pruebas técnicas",
+      "description": "Enviar la prueba práctica de desarrollo a los finalistas.",
+      "priority": "high",
+      "dueDate": "2026-09-09",
+      "status": "completed"
+    },
+    {
+      "id": "5",
+      "title": "Preparar ofertas laborales",
+      "description": "Redactar las cartas de oferta para los candidatos seleccionados.",
+      "priority": "low",
+      "dueDate": "2026-09-12",
+      "status": "pending"
+    }
+  ]
 }
-
-
-
-
-

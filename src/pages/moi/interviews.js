@@ -6,11 +6,11 @@ import './interviews.css';
 
 const InterviewForm = ({ initialData, onSubmit, loading }) => {
   const [form, setForm] = useState(initialData || {
-    candidateName: '',
-    position: '',
-    date: '',
-    notes: '',
-    status: 'scheduled'
+    fecha: '',
+    hora: '',
+    lugar: '',
+    postulante: '',
+    vacante: ''
   });
 
   useEffect(() => {
@@ -24,8 +24,8 @@ const InterviewForm = ({ initialData, onSubmit, loading }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!form.candidateName || !form.position) {
-      alert('Nombre del candidato y puesto son obligatorios');
+    if (!form.fecha || !form.hora || !form.lugar || !form.postulante || !form.vacante) {
+      alert('Fecha, hora, lugar, postulante y vacante son obligatorios');
       return;
     }
     onSubmit(form);
@@ -37,56 +37,54 @@ const InterviewForm = ({ initialData, onSubmit, loading }) => {
     React.createElement(
       'div',
       { className: 'form-group' },
-      React.createElement('label', null, 'Candidato * '),
-      React.createElement('input', {
-        name: 'candidateName',
-        value: form.candidateName,
-        onChange: handleChange
-      })
-    ),
-    React.createElement(
-      'div',
-      { className: 'form-group' },
-      React.createElement('label', null, 'Puesto * '),
-      React.createElement('input', {
-        name: 'position',
-        value: form.position,
-        onChange: handleChange
-      })
-    ),
-    React.createElement(
-      'div',
-      { className: 'form-group' },
-      React.createElement('label', null, 'Fecha '),
+      React.createElement('label', null, 'Fecha * '),
       React.createElement('input', {
         type: 'date',
-        name: 'date',
-        value: form.date || '',
+        name: 'fecha',
+        value: form.fecha || '',
         onChange: handleChange
       })
     ),
     React.createElement(
       'div',
       { className: 'form-group' },
-      React.createElement('label', null, 'Notas '),
-      React.createElement('textarea', {
-        name: 'notes',
-        rows: '3',
-        value: form.notes || '',
+      React.createElement('label', null, 'Hora * '),
+      React.createElement('input', {
+        type: 'time',
+        name: 'hora',
+        value: form.hora || '',
         onChange: handleChange
       })
     ),
     React.createElement(
       'div',
       { className: 'form-group' },
-      React.createElement('label', null, 'Estado '),
-      React.createElement(
-        'select',
-        { name: 'status', value: form.status, onChange: handleChange },
-        React.createElement('option', { value: 'scheduled' }, 'Agendada'),
-        React.createElement('option', { value: 'completed' }, 'Completada'),
-        React.createElement('option', { value: 'cancelled' }, 'Cancelada')
-      )
+      React.createElement('label', null, 'Lugar * '),
+      React.createElement('input', {
+        name: 'lugar',
+        value: form.lugar,
+        onChange: handleChange
+      })
+    ),
+    React.createElement(
+      'div',
+      { className: 'form-group' },
+      React.createElement('label', null, 'Postulante (id) * '),
+      React.createElement('input', {
+        name: 'postulante',
+        value: form.postulante,
+        onChange: handleChange
+      })
+    ),
+    React.createElement(
+      'div',
+      { className: 'form-group' },
+      React.createElement('label', null, 'Vacante (id) * '),
+      React.createElement('input', {
+        name: 'vacante',
+        value: form.vacante,
+        onChange: handleChange
+      })
     ),
     React.createElement(
       'button',
@@ -185,31 +183,37 @@ export const Interviews = () => {
             React.createElement(
               'div',
               { key: item.id, className: 'interview-card' },
-              React.createElement('h3', null, item.candidateName),
+              React.createElement('h3', null, `Postulante ${item.postulante}`),
               React.createElement(
                 'p',
                 null,
-                React.createElement('strong', null, 'Puesto:'),
+                React.createElement('strong', null, 'Vacante:'),
                 ' ',
-                item.position
+                item.vacante
               ),
               React.createElement(
                 'p',
                 null,
                 React.createElement('strong', null, 'Fecha:'),
                 ' ',
-                item.date
-                  ? new Date(item.date).toLocaleDateString()
+                item.fecha
+                  ? new Date(`${item.fecha}T00:00:00`).toLocaleDateString()
                   : 'Pendiente'
               ),
               React.createElement(
                 'p',
                 null,
-                React.createElement('strong', null, 'Estado:'),
+                React.createElement('strong', null, 'Hora:'),
                 ' ',
-                item.status
+                item.hora
               ),
-              React.createElement('p', null, item.notes),
+              React.createElement(
+                'p',
+                null,
+                React.createElement('strong', null, 'Lugar:'),
+                ' ',
+                item.lugar
+              ),
               React.createElement(
                 'div',
                 { className: 'card-actions' },
