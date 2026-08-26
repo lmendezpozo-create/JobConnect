@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- ============================================
+       META & SEO
+       ============================================ -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Gestión de Entrevistas y Notas del proceso de reclutamiento" />
+  <title> Entrevistas | Sistema de Reclutamiento </title>
+
+  <!-- ============================================
+       ESTILOS (orden: base → componentes → página)
+       ============================================ -->
+  <link rel="stylesheet" href="./css/interviews.css" />
+</head>
+
+<body>
+
+  <!-- ==================================================
+       HEADER: Navegación principal + título de sección
+       ================================================== -->
+  <header class="header" role="banner">
+    <nav class="header__nav" aria-label="Navegación principal">
+      <a href="./index.html" class="header__logo">
+        <span class="header__logo-icon" aria-hidden="true">📋</span>
+        <span class="header__logo-text">Reclutamiento</span>
+      </a>
+
+      <ul class="header__menu" role="menubar">
+        <li class="header__menu-item" role="none">
+          <a href="./index.html" class="header__menu-link" role="menuitem">Inicio</a>
+        </li>
+        <li class="header__menu-item" role="none">
+          <a href="./interviews.html"
+             class="header__menu-link header__menu-link--active"
+             role="menuitem"
+             aria-current="page">
+            Entrevistas
+          </a>
+        </li>
+        <li class="header__menu-item" role="none">
+          <a href="./todos.html" class="header__menu-link" role="menuitem">Tareas</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- ==================================================
+       MAIN: Contenido principal de la página
+       ================================================== -->
+  <main class="interviews" role="main" id="interviews-app">
+
+    <!-- ── Encabezado de sección ── -->
+    <header class="interviews__header">
+      <h1 class="interviews__title">Entrevistas / Notas</h1>
+      <button
+        type="button"
+        class="btn btn--primary"
+        id="btn-open-create-modal"
+        data-action="open-modal"
+        data-mode="create"
+        aria-haspopup="dialog"
+      >
+        <span aria-hidden="true">+</span> Nueva Entrevista
+      </button>
+    </header>
+
+    <!-- ── Contenedor de alertas de error global ──
+         El JS inyecta aquí el mensaje de error del interceptor
+         o de cualquier petición fallida. Se oculta con [hidden]. -->
+    <div
+      class="interviews__error alert alert--error"
+      id="error-banner"
+      role="alert"
+      aria-live="assertive"
+      hidden
+    >
+      <p class="alert__message" id="error-message"></p>
+      <button
+        type="button"
+        class="alert__close-btn"
+        id="btn-close-error"
+        data-action="clear-error"
+        aria-label="Cerrar mensaje de error"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- ── Indicador de carga inicial ──
+         Visible mientras fetchAll() está en curso
+         y la lista aún está vacía. -->
+    <div
+      class="interviews__loading"
+      id="loading-indicator"
+      role="status"
+      aria-live="polite"
+      hidden
+    >
+      <span class="spinner" aria-hidden="true"></span>
+      <p>Cargando entrevistas…</p>
+    </div>
+
+    <!-- ── Estado vacío ──
+         Se muestra cuando la API devuelve un array vacío. -->
+    <section
+      class="interviews__empty"
+      id="empty-state"
+      aria-label="Sin entrevistas registradas"
+      hidden
+    >
+      <p class="interviews__empty-icon" aria-hidden="true">📭</p>
+      <p class="interviews__empty-text">No hay entrevistas registradas</p>
+    </section>
+
+    <!-- ── Lista de entrevistas ──
+         El JS itera sobre el array de /entrevistas y genera
+         una <article> por cada registro dentro de este contenedor.
+         data-entity="interview" permite al JS identificar el tipo. -->
+    <section
+      class="interviews__list"
+      id="interviews-list"
+      data-entity="interview"
+      aria-label="Listado de entrevistas"
+    >
+      <!-- ═══════════════════════════════════════════════
+           PLANTILLA DE TARJETA (referencia para el JS)
+           El JS clona/genera esta estructura por item.
+           Se deja un ejemplo estático como referencia visual.
+           ═══════════════════════════════════════════════ -->
+      <!--
+      <article class="interview-card" data-id="1" data-entity="interview">
+        <div class="interview-card__content">
+          <h3 class="interview-card__candidate">Nombre del Postulante</h3>
+          <p class="interview-card__position">Desarrollador Web</p>
+          <p class="interview-card__date">Fecha: 09/09/2026</p>
+          <p class="interview-card__hora">Hora: 10:00</p>
+          <p class="interview-card__lugar">Lugar: Oficina</p>
+        </div>
+        <div class="interview-card__actions">
+          <button class="btn btn--small" data-action="edit" data-id="1">Editar</button>
+          <button class="btn btn--danger btn--small" data-action="delete" data-id="1">Eliminar</button>
+        </div>
+      </article>
+      -->
+    </section>
+
+  </main>
+
+  <!-- ==================================================
+       MODAL: Formulario Crear / Editar Entrevista
+       El JS controla la visibilidad con [hidden] o clase.
+       data-mode="create|edit" indica la operación actual.
+       ================================================== -->
+  <div
+    class="modal"
+    id="interview-modal"
+    data-mode="create"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="modal-title"
+    hidden
+  >
+    <!-- Overlay: clic fuera cierra el modal -->
+    <div class="modal__overlay" id="modal-overlay" data-action="close-modal"></div>
+
+    <div class="modal__container">
+      <header class="modal__header">
+        <h2 class="modal__title" id="modal-title">Nueva Entrevista</h2>
+        <button
+          type="button"
+          class="modal__close-btn"
+          id="btn-close-modal"
+          data-action="close-modal"
+          aria-label="Cerrar formulario"
+        >
+          ✕
+        </button>
+      </header>
+
+      <div class="modal__body">
+        <!-- ── Formulario de Entrevista ──
+             action="" evita navegación; el JS previene el submit
+             y ejecuta POST (crear) o PATCH (editar) según data-mode. -->
+        <form
+          class="interview-form"
+          id="interview-form"
+          data-entity="interview"
+          novalidate
+        >
+          <!-- Campo oculto: ID del registro en modo edición.
+               El JS lo setea al abrir el modal en modo "edit". -->
+          <input type="hidden" name="id" id="field-id" value="" />
+
+          <!-- Fecha -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-fecha">
+              Fecha <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="date"
+              class="form-group__input"
+              id="field-fecha"
+              name="fecha"
+              required
+              aria-required="true"
+              aria-describedby="error-fecha"
+            />
+            <span class="form-group__error" id="error-fecha" role="alert" hidden></span>
+          </div>
+
+          <!-- Hora -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-hora">
+              Hora <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="time"
+              class="form-group__input"
+              id="field-hora"
+              name="hora"
+              required
+              aria-required="true"
+              aria-describedby="error-hora"
+            />
+            <span class="form-group__error" id="error-hora" role="alert" hidden></span>
+          </div>
+
+          <!-- Lugar -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-lugar">
+              Lugar <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-group__input"
+              id="field-lugar"
+              name="lugar"
+              placeholder="Ej. Oficina, Virtual, Sala de juntas…"
+              required
+              aria-required="true"
+              aria-describedby="error-lugar"
+            />
+            <span class="form-group__error" id="error-lugar" role="alert" hidden></span>
+          </div>
+
+          <!-- Postulante -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-postulante">
+              Postulante <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <select
+              class="form-group__select"
+              id="field-postulante"
+              name="postulante"
+              required
+              aria-required="true"
+              aria-describedby="error-postulante"
+            ></select>
+            <span class="form-group__error" id="error-postulante" role="alert" hidden></span>
+          </div>
+
+          <!-- Vacante -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-vacante">
+              Vacante <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <select
+              class="form-group__select"
+              id="field-vacante"
+              name="vacante"
+              required
+              aria-required="true"
+              aria-describedby="error-vacante"
+            ></select>
+            <span class="form-group__error" id="error-vacante" role="alert" hidden></span>
+          </div>
+
+          <!-- Acciones del formulario -->
+          <footer class="form-actions">
+            <button
+              type="button"
+              class="btn btn--secondary"
+              data-action="close-modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              class="btn btn--primary"
+              id="btn-submit-form"
+            >
+              Crear
+            </button>
+          </footer>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================================================
+       CONFIRM DIALOG: Eliminación de Entrevista
+       El JS muestra este diálogo al hacer clic en "Eliminar"
+       y ejecuta DELETE /entrevistas/:id al confirmar.
+       ================================================== -->
+  <div
+    class="confirm-dialog"
+    id="delete-dialog"
+    role="alertdialog"
+    aria-modal="true"
+    aria-labelledby="delete-dialog-title"
+    aria-describedby="delete-dialog-message"
+    hidden
+  >
+    <div class="confirm-dialog__overlay" data-action="cancel-delete"></div>
+
+    <div class="confirm-dialog__container">
+      <header class="confirm-dialog__header">
+        <h3 class="confirm-dialog__title" id="delete-dialog-title">
+          Eliminar Entrevista
+        </h3>
+      </header>
+
+      <div class="confirm-dialog__body">
+        <!-- El JS inyecta el nombre del candidato aquí -->
+        <p class="confirm-dialog__message" id="delete-dialog-message"></p>
+      </div>
+
+      <footer class="confirm-dialog__footer">
+        <button
+          type="button"
+          class="btn btn--secondary"
+          data-action="cancel-delete"
+        >
+          Cancelar
+        </button>
+        <button
+          type="button"
+          class="btn btn--danger"
+          id="btn-confirm-delete"
+          data-action="confirm-delete"
+        >
+          Eliminar
+        </button>
+      </footer>
+    </div>
+  </div>
+
+  <!-- ==================================================
+       FOOTER
+       ================================================== -->
+  <footer class="footer" role="contentinfo">
+    <p class="footer__text">
+      © 2026 Sistema de Reclutamiento — Módulo de Entrevistas
+    </p>
+  </footer>
+
+  <!-- ==================================================
+       SCRIPTS (módulos ES6 — orden de carga)
+       1. Servicios (fetch + endpoints)
+       2. Componentes UI (modal, confirm)
+       3. Controlador de página (lógica principal)
+       ================================================== -->
+  <script type="module" src="./js/components/moi/pages/interviews.controller.js"></script>
+
+</body>
+</html>

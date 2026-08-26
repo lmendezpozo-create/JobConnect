@@ -1,3 +1,48 @@
-node_modules/
-dist/
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Secretos, credenciales y configuraciÃ³n local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*credential*.json
+*credentials*.json
+*secret*.json
+*secrets*.json
+*password*.txt
+*token*.txt
+db.local.json
+db.secrets.json
+
+# Archivos de servicios cloud y despliegue con secretos
+serviceAccountKey.json
+firebase-adminsdk-*.json
+.vercel
+.netlify
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
 .DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Empresas Clientes · Malka-Brete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../Aiden/css/style.css">
+  <style>
+    .company-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
+    .company-form .form-actions { grid-column: 1 / -1; display: flex; gap: 10px; justify-content: flex-end; }
+  </style>
+</head>
+<body>
+  <div class="app-container" style="display:flex;">
+    <aside class="app-sidebar" style="position:relative;top:0;height:100vh;">
+      <div class="app-sidebar__section-title">Módulos</div>
+      <nav class="app-sidebar__nav">
+        <a href="../../Aiden/html/dashboard-admin.html" class="app-sidebar__item"><span class="app-sidebar__icon">📊</span><span>Dashboard</span></a>
+        <a href="../../Aiden/html/candidatos.html" class="app-sidebar__item"><span class="app-sidebar__icon">👤</span><span>Candidatos</span></a>
+        <a href="../../Aiden/html/vacantes.html" class="app-sidebar__item"><span class="app-sidebar__icon">💼</span><span>Vacantes</span></a>
+        <a href="companies.html" class="app-sidebar__item app-sidebar__item--active"><span class="app-sidebar__icon">🏢</span><span>Empresas</span></a>
+        <a href="../../Aiden/html/postulaciones.html" class="app-sidebar__item"><span class="app-sidebar__icon">📄</span><span>Postulaciones</span></a>
+        <a href="../../Aiden/html/entrevistas.html" class="app-sidebar__item"><span class="app-sidebar__icon">📝</span><span>Entrevistas</span></a>
+        <a href="../../Aiden/html/tareas.html" class="app-sidebar__item"><span class="app-sidebar__icon">✅</span><span>Tareas</span></a>
+      </nav>
+    </aside>
+
+    <div style="flex:1;margin-left:250px;">
+      <div style="padding:32px;">
+        <div class="page-header">
+          <div>
+            <h1 class="page-header__title">Empresas Clientes</h1>
+            <p class="page-header__subtitle">Gestiona la información de las empresas clientes de JobConnect.</p>
+          </div>
+          <button id="btn-logout" class="btn btn-danger">Cerrar Sesión</button>
+        </div>
+
+        <section style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:24px;margin-bottom:24px;box-shadow:var(--shadow-sm);">
+          <h2 style="font-size:16px;font-weight:700;margin:0 0 16px;color:var(--color-primary-dark);">Registrar Nueva Empresa</h2>
+          <form id="company-form" class="company-form">
+            <input type="hidden" id="company-id">
+            <div class="form-field form-field--full">
+              <label for="company-nombre">Nombre de la Empresa *</label>
+              <input type="text" id="company-nombre" required placeholder="Ej: Tech Corp">
+            </div>
+            <div class="form-field">
+              <label for="company-contacto">Correo de Contacto</label>
+              <input type="email" id="company-contacto" placeholder="info@empresa.com">
+            </div>
+            <div class="form-field">
+              <label for="company-telefono">Teléfono</label>
+              <input type="text" id="company-telefono" placeholder="+506 2222 3333">
+            </div>
+            <div class="form-field form-field--full">
+              <label for="company-direccion">Dirección</label>
+              <input type="text" id="company-direccion" placeholder="San José, Costa Rica">
+            </div>
+            <div class="form-field">
+              <label for="company-sector">Sector</label>
+              <input type="text" id="company-sector" placeholder="Ej: Tecnología">
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary">Guardar Empresa</button>
+              <button type="button" id="btn-cancel" class="btn btn-secondary" style="display:none;">Cancelar</button>
+            </div>
+          </form>
+        </section>
+
+        <section style="background:var(--color-surface);border:1px solid var(--color-border);border-radius:var(--radius-md);padding:24px;box-shadow:var(--shadow-sm);">
+          <h2 style="font-size:16px;font-weight:700;margin:0 0 16px;color:var(--color-primary-dark);">Listado de Empresas</h2>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Nombre</th>
+                  <th>Contacto</th>
+                  <th>Teléfono</th>
+                  <th>Sector</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="companies-table-body"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./companiesUI.js"></script>
+</body>
+</html>

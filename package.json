@@ -1,17 +1,17 @@
 {
-  "name": "malka-jobconnect",
-  "private": true,
+  "name": "jobconnect-malka-brete",
   "version": "1.0.0",
+  "private": true,
   "type": "module",
-  "description": "MALKA - Sistema de gestión de empleabilidad. Módulo de Vacantes.",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"node server.js\" \"vite\"",
+    "server": "node server.js",
     "build": "vite build",
-    "preview": "vite preview",
-    "server": "json-server --watch db.json --port 3000"
+    "preview": "vite preview"
   },
   "devDependencies": {
-    "vite": "^5.4.0",
-    "json-server": "^0.17.4"
+    "concurrently": "^8.2.2",
+    "json-server": "^0.17.4",
+    "vite": "^8.2.2"
   }
 }

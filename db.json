@@ -1,112 +1,536 @@
 {
+  "usuarios": [
+    {
+      "id": 1,
+      "username": "emilys",
+      "password": "emilyspass",
+      "nombre": "Emily S.",
+      "rol": "admin"
+    },
+    {
+      "id": 2,
+      "username": "reclutador",
+      "password": "reclutador123",
+      "nombre": "María López",
+      "rol": "reclutador"
+    },
+    {
+      "id": 3,
+      "username": "postulante",
+      "password": "postulante123",
+      "nombre": "Carlos Ruiz",
+      "rol": "candidato"
+    }
+  ],
+  "candidatos": [
+    {
+      "id": 1,
+      "userId": 3,
+      "firstName": "Aiden",
+      "lastName": "Ruiz",
+      "email": "aidenmontero27@gmail.com",
+      "phone": "+50670001122",
+      "status": "activo",
+      "habilidades": [
+        "JavaScript",
+        "React",
+        "CSS",
+        "HTML",
+        "Node.js"
+      ],
+      "experiencia": [
+        {
+          "empresa": "Freelance",
+          "cargo": "Desarrollador Web",
+          "anios": 0,
+          "descripcion": "Desarrollo de sitios web y aplicaciones SPA, Servicio al cliente"
+        }
+      ],
+      "educacion": [
+        {
+          "titulo": "Ingeniería en Sistemas",
+          "institucion": "Universidad de Costa Rica",
+          "anio": "2021"
+        }
+      ],
+      "idiomas": [
+        "Español",
+        "Inglés"
+      ],
+      "resumen": "Desarrollador frontend con 2 años de experiencia en React y Node.js",
+      "ubicacion": "san josé",
+      "foto": "",
+      "skills": "JavaScript, React, CSS, HTML, Node.js",
+      "experience": "Freelance|Desarrollador Web||Desarrollo de sitios web y aplicaciones SPA, Servicio al cliente",
+      "education": "Ingeniería en Sistemas|Universidad de Costa Rica|2021",
+      "certificaciones": [
+        "VLA Academy"
+      ]
+    },
+    {
+      "id": 2,
+      "userId": null,
+      "firstName": "Emily",
+      "lastName": "Johnson",
+      "email": "emily.johnson@email.com",
+      "phone": "+1234567890",
+      "status": "activo",
+      "habilidades": [
+        "Python",
+        "SQL",
+        "Power BI",
+        "Excel",
+        "Análisis de datos"
+      ],
+      "experiencia": [
+        {
+          "empresa": "Tech Corp",
+          "cargo": "Desarrollador Frontend",
+          "duracion": "3 años",
+          "descripcion": "Desarrollo de interfaces de usuario"
+        }
+      ],
+      "educacion": [
+        {
+          "titulo": "Licenciatura en Ciencias de la Computación",
+          "institucion": "MIT",
+          "anio": 2019
+        }
+      ],
+      "idiomas": [
+        "Español",
+        "Inglés",
+        "Francés"
+      ],
+      "resumen": "Desarrolladora frontend con experiencia en React y Vue.js"
+    },
+    {
+      "id": 3,
+      "userId": null,
+      "firstName": "Carlos",
+      "lastName": "Mendoza",
+      "email": "carlos.m@email.com",
+      "phone": "+50688887777",
+      "status": "en_proceso",
+      "habilidades": [
+        "Power BI",
+        "SQL",
+        "Python",
+        "Análisis estadístico"
+      ],
+      "experiencia": [
+        {
+          "empresa": "Data Solutions",
+          "cargo": "Analista de Datos",
+          "duracion": "1 año",
+          "descripcion": "Análisis y visualización de datos empresariales"
+        }
+      ],
+      "educacion": [
+        {
+          "titulo": "Maestría en Ciencia de Datos",
+          "institucion": "Universidad Stanford",
+          "anio": 2022
+        }
+      ],
+      "idiomas": [
+        "Español",
+        "Inglés"
+      ],
+      "resumen": "Analista de datos con experiencia en SQL y Power BI"
+    },
+    {
+      "id": 4,
+      "userId": null,
+      "firstName": "María",
+      "lastName": "García",
+      "email": "maria.garcia@email.com",
+      "phone": "+50677778888",
+      "status": "activo",
+      "habilidades": [
+        "Servicio al cliente",
+        "Comunicación",
+        "Inglés",
+        "Microsoft Office",
+        "Atención al cliente"
+      ],
+      "experiencia": [
+        {
+          "empresa": "Banco Nacional",
+          "cargo": "Asesora de Servicio al Cliente",
+          "duracion": "4 años",
+          "descripcion": "Atención a clientes bancarios y resolución de problemas"
+        }
+      ],
+      "educacion": [
+        {
+          "titulo": "Bachillerato en Administración de Empresas",
+          "institucion": "Universidad Latina",
+          "anio": 2018
+        }
+      ],
+      "idiomas": [
+        "Español",
+        "Inglés"
+      ],
+      "resumen": "Profesional de servicio al cliente con 4 años de experiencia bancaria"
+    }
+  ],
   "vacantes": [
     {
       "id": 1,
       "titulo": "Desarrollador Frontend",
-      "descripcion": "Responsable del desarrollo y mantenimiento de interfaces web utilizando frameworks modernos, asegurando buenas prácticas de accesibilidad y rendimiento.",
-      "empresa": "MALKA",
+      "empresa": "Tech Corp",
       "ubicacion": "San José, Costa Rica",
-      "modalidad": "Híbrido",
-      "salario": 850000,
-      "tipoContrato": "Tiempo completo",
-      "categoria": "Tecnología",
-      "estado": "Activa"
+      "salario": "₡1,200,000",
+      "tipo": "Tiempo completo",
+      "estado": "activa",
+      "descripcion": "Buscamos desarrollador frontend con experiencia en React y Vue.js",
+      "requisitos": [
+        "JavaScript",
+        "React",
+        "CSS",
+        "HTML",
+        "Vue.js"
+      ]
     },
     {
       "id": 2,
-      "titulo": "Analista de Reclutamiento",
-      "descripcion": "Encargado de la búsqueda, filtrado y coordinación de entrevistas para procesos de selección de personal en distintas áreas de la empresa.",
-      "empresa": "MALKA",
+      "titulo": "Analista de Datos",
+      "empresa": "Data Solutions",
       "ubicacion": "Heredia, Costa Rica",
-      "modalidad": "Presencial",
-      "salario": 620000,
-      "tipoContrato": "Tiempo completo",
-      "categoria": "Recursos Humanos",
-      "estado": "Activa"
+      "salario": "₡1,000,000",
+      "tipo": "Tiempo completo",
+      "estado": "activa",
+      "descripcion": "Análisis y visualización de datos para equipos de negocio",
+      "requisitos": [
+        "SQL",
+        "Power BI",
+        "Python",
+        "Análisis de datos",
+        "Excel"
+      ]
     },
     {
       "id": 3,
-      "titulo": "Contador Junior",
-      "descripcion": "Apoyo en el registro contable, conciliaciones bancarias y elaboración de reportes financieros mensuales.",
-      "empresa": "MALKA",
-      "ubicacion": "Cartago, Costa Rica",
-      "modalidad": "Presencial",
-      "salario": 550000,
-      "tipoContrato": "Medio tiempo",
-      "categoria": "Contabilidad",
-      "estado": "Pausada"
+      "titulo": "Agente de Servicio al Cliente",
+      "empresa": "Banco Popular",
+      "ubicacion": "San José, Costa Rica",
+      "salario": "₡650,000",
+      "tipo": "Tiempo completo",
+      "estado": "activa",
+      "descripcion": "Atención al cliente bancario por teléfono y chat. Se requiere experiencia en servicio al cliente y manejo de Microsoft Office.",
+      "requisitos": [
+        "Servicio al cliente",
+        "Comunicación",
+        "Inglés",
+        "Microsoft Office",
+        "Atención al cliente"
+      ]
     },
     {
       "id": 4,
-      "titulo": "Practicante de Marketing Digital",
-      "descripcion": "Apoyo en la creación de contenido para redes sociales y campañas digitales, ideal para estudiantes activos.",
-      "empresa": "MALKA",
-      "ubicacion": "Remoto",
-      "modalidad": "Remoto",
-      "salario": 250000,
-      "tipoContrato": "Práctica profesional",
-      "categoria": "Mercadeo",
-      "estado": "Cerrada"
-    },
-    {
-      "id": 5,
-      "titulo": "Desarrollador Backend Node.js",
-      "descripcion": "Diseño y mantenimiento de APIs REST, integración con bases de datos y optimización de rendimiento del servidor.",
-      "empresa": "MALKA",
-      "ubicacion": "San José, Costa Rica",
-      "modalidad": "Híbrido",
-      "salario": 950000,
-      "tipoContrato": "Tiempo completo",
-      "categoria": "Tecnología",
-      "estado": "Activa"
-    },
-    {
-      "id": 6,
-      "titulo": "Desarrollador Full Stack",
-      "descripcion": "Desarrollo de funcionalidades end-to-end, desde la interfaz hasta la capa de datos, trabajando con JavaScript moderno.",
-      "empresa": "MALKA",
-      "ubicacion": "Remoto",
-      "modalidad": "Remoto",
-      "salario": 1100000,
-      "tipoContrato": "Tiempo completo",
-      "categoria": "Tecnología",
-      "estado": "Activa"
-    },
-    {
-      "id": 7,
-      "titulo": "QA Tester / Automatización",
-      "descripcion": "Diseño y ejecución de pruebas manuales y automatizadas para garantizar la calidad del software antes de cada liberación.",
-      "empresa": "MALKA",
+      "titulo": "Asistente Administrativo",
+      "empresa": "Grupo Financiero",
       "ubicacion": "Heredia, Costa Rica",
-      "modalidad": "Híbrido",
-      "salario": 780000,
-      "tipoContrato": "Tiempo completo",
-      "categoria": "Tecnología",
-      "estado": "Pausada"
+      "salario": "₡580,000",
+      "tipo": "Tiempo completo",
+      "estado": "activa",
+      "descripcion": "Soporte administrativo general. Manejo de ofimática y atención al cliente.",
+      "requisitos": [
+        "Microsoft Office",
+        "Comunicación",
+        "Atención al cliente",
+        "Organización"
+      ]
     },
     {
-      "id": 8,
-      "titulo": "Administrador de Bases de Datos",
-      "descripcion": "Gestión, respaldo y optimización de bases de datos relacionales, así como monitoreo de rendimiento e integridad de la información.",
-      "empresa": "MALKA",
-      "ubicacion": "San José, Costa Rica",
-      "modalidad": "Presencial",
-      "salario": 1000000,
-      "tipoContrato": "Tiempo completo",
-      "categoria": "Tecnología",
-      "estado": "Activa"
-    },
-    {
-      "id": 9,
-      "titulo": "Practicante de Desarrollo de Software",
-      "descripcion": "Apoyo al equipo de desarrollo en tareas de programación, pruebas y documentación técnica, ideal para estudiantes avanzados.",
-      "empresa": "MALKA",
-      "ubicacion": "Remoto",
-      "modalidad": "Remoto",
-      "salario": 300000,
-      "tipoContrato": "Práctica profesional",
-      "categoria": "Tecnología",
-      "estado": "Activa"
+      "titulo": "Recursos humanos",
+      "descripcion": "Vacante para recursos humanos",
+      "area": "Servicio al cliente",
+      "skills": [
+        "Ingles",
+        "trabajar bajo presión"
+      ],
+      "experiencia": "6 meses en trabajos que requieren servicio al cliente",
+      "ubicacion": "san josé",
+      "salario": "450000",
+      "estado": "activa",
+      "id": 5
     }
-  ]
+  ],
+  "empresas": [
+    {
+      "id": 1,
+      "nombre": "Tech Corp",
+      "contacto": "info@techcorp.com",
+      "telefono": "+1234567890",
+      "direccion": "San José, Costa Rica",
+      "sector": "Tecnología"
+    },
+    {
+      "id": 2,
+      "nombre": "Data Solutions",
+      "contacto": "contacto@datasolutions.com",
+      "telefono": "+50622223333",
+      "direccion": "Heredia, Costa Rica",
+      "sector": "Consultoría"
+    },
+    {
+      "id": 3,
+      "nombre": "Banco Popular",
+      "contacto": "rrhh@bancopopular.com",
+      "telefono": "+50633334444",
+      "direccion": "San José, Costa Rica",
+      "sector": "Finanzas"
+    },
+    {
+      "id": 4,
+      "nombre": "Grupo Financiero",
+      "contacto": "empleo@grupofinanciero.com",
+      "telefono": "+50644445555",
+      "direccion": "Heredia, Costa Rica",
+      "sector": "Finanzas"
+    }
+  ],
+  "postulaciones": [
+    {
+      "id": 1,
+      "candidatoId": 1,
+      "vacanteId": 1,
+      "nombre": "Carlos Ruiz",
+      "empresa": "Tech Corp",
+      "cargo": "Desarrollador Frontend",
+      "email": "carlos.ruiz@email.com",
+      "fecha": "2026-08-20",
+      "estado": "rechazado",
+      "matchScore": 60
+    },
+    {
+      "id": 2,
+      "candidatoId": 4,
+      "vacanteId": 3,
+      "nombre": "María García",
+      "empresa": "Banco Popular",
+      "cargo": "Agente de Servicio al Cliente",
+      "email": "maria.garcia@email.com",
+      "fecha": "2026-08-21",
+      "estado": "entrevista",
+      "matchScore": 100
+    },
+    {
+      "id": 3,
+      "candidatoId": 2,
+      "vacanteId": 1,
+      "nombre": "Emily Johnson",
+      "empresa": "Tech Corp",
+      "cargo": "Desarrollador Frontend",
+      "email": "emily.johnson@email.com",
+      "fecha": "2026-08-18",
+      "estado": "Entrevista",
+      "matchScore": 80
+    },
+    {
+      "id": 4,
+      "candidatoId": 3,
+      "vacanteId": 2,
+      "nombre": "Carlos Mendoza",
+      "empresa": "Data Solutions",
+      "cargo": "Analista de Datos",
+      "email": "carlos.m@email.com",
+      "fecha": "2026-08-19",
+      "estado": "Aceptado",
+      "matchScore": 100
+    },
+    {
+      "candidatoId": 1,
+      "vacanteId": 2,
+      "nombre": "Carlos Ruiz",
+      "cargo": "Analista de Datos",
+      "empresa": "Data Solutions",
+      "fecha": "2026-08-26",
+      "estado": "pendiente",
+      "matchScore": 50,
+      "id": 5
+    },
+    {
+      "candidatoId": 1,
+      "vacanteId": 4,
+      "nombre": "Carlos Ruiz",
+      "cargo": "Asistente Administrativo",
+      "empresa": "Grupo Financiero",
+      "fecha": "2026-08-26",
+      "estado": "pendiente",
+      "matchScore": 50,
+      "id": 6
+    }
+  ],
+  "entrevistas": [
+    {
+      "id": 1,
+      "candidato": "Emily Johnson",
+      "candidatoId": 2,
+      "postulacionId": 3,
+      "vacanteId": 1,
+      "empresa": "Tech Corp",
+      "cargo": "Desarrollador Frontend",
+      "fecha": "2026-09-01T10:00",
+      "tipo": "Virtual",
+      "estado": "Programada",
+      "resultado": "Pendiente",
+      "notas": "Entrevista técnica para puesto Frontend"
+    },
+    {
+      "id": 2,
+      "candidato": "Carlos Mendoza",
+      "candidatoId": 3,
+      "postulacionId": 4,
+      "vacanteId": 2,
+      "empresa": "Data Solutions",
+      "cargo": "Analista de Datos",
+      "fecha": "2026-08-28T14:30",
+      "tipo": "Presencial",
+      "estado": "Completada",
+      "resultado": "Aprobado",
+      "notas": "Buen desempeño en pruebas técnicas"
+    },
+    {
+      "candidato": "María García",
+      "candidatoId": 4,
+      "postulacionId": 2,
+      "fecha": "San Jóse 2pm",
+      "estado": "pendiente",
+      "notas": "",
+      "id": 3
+    },
+    {
+      "candidato": "María García",
+      "candidatoId": 4,
+      "postulacionId": 2,
+      "fecha": "2026-08-28T02:00",
+      "estado": "realizada",
+      "notas": "",
+      "id": 4,
+      "resultado": "aceptar"
+    },
+    {
+      "candidato": "María García",
+      "candidatoId": 4,
+      "postulacionId": 2,
+      "fecha": "2026-08-26T22:22",
+      "estado": "realizada",
+      "notas": "aprobado\n",
+      "id": 5,
+      "resultado": "aceptar"
+    },
+    {
+      "candidato": "María García",
+      "candidatoId": 4,
+      "postulacionId": 2,
+      "fecha": "32026-02-01T20:00",
+      "estado": "pendiente",
+      "notas": "",
+      "id": 6
+    }
+  ],
+  "tareas": [
+    {
+      "id": 1,
+      "titulo": "Revisar CV de María García",
+      "descripcion": "Verificar experiencia en servicio al cliente",
+      "asignadoA": "María López",
+      "fechaLimite": "2026-09-05",
+      "prioridad": "Alta",
+      "estado": "Pendiente"
+    },
+    {
+      "id": 2,
+      "titulo": "Agendar entrevista con Carlos Mendoza",
+      "descripcion": "Coordinar entrevista presencial",
+      "asignadoA": "María López",
+      "fechaLimite": "2026-09-03",
+      "prioridad": "Media",
+      "estado": "En progreso"
+    },
+    {
+      "id": 3,
+      "titulo": "Actualizar vacante de Analista de Datos",
+      "descripcion": "Agregar requisitos de Python y SQL",
+      "asignadoA": "Admin Principal",
+      "fechaLimite": "2026-09-10",
+      "prioridad": "Baja",
+      "estado": "Completada"
+    }
+  ],
+  "contratados": [
+    {
+      "id": 1,
+      "nombre": "Ana Sofía Vargas",
+      "cargo": "Desarrollador Backend",
+      "empresa": "Tech Corp",
+      "fechaIngreso": "2026-08-08",
+      "salario": "₡1,100,000",
+      "estado": "Activo"
+    },
+    {
+      "id": 2,
+      "nombre": "Luis Diego Ramírez",
+      "cargo": "Diseñador UX",
+      "empresa": "Data Solutions",
+      "fechaIngreso": "2026-06-15",
+      "salario": "₡950,000",
+      "estado": "Activo"
+    }
+  ],
+  "despedidos": [
+    {
+      "id": 1,
+      "nombre": "Pedro Sánchez",
+      "cargo": "Vendedor",
+      "empresa": "Tech Corp",
+      "fechaSalida": "2026-08-12",
+      "motivo": "Bajo rendimiento",
+      "periodo": "3 meses"
+    },
+    {
+      "id": 2,
+      "nombre": "Laura Méndez",
+      "cargo": "Asistente",
+      "empresa": "Grupo Financiero",
+      "fechaSalida": "2026-06-20",
+      "motivo": "Renuncia voluntaria",
+      "periodo": "1 año"
+    }
+  ],
+  "actividad_semanal": [
+    {
+      "dia": "Lunes",
+      "horas": 8
+    },
+    {
+      "dia": "Martes",
+      "horas": 7.5
+    },
+    {
+      "dia": "Miércoles",
+      "horas": 8
+    },
+    {
+      "dia": "Jueves",
+      "horas": 6.5
+    },
+    {
+      "dia": "Viernes",
+      "horas": 7
+    },
+    {
+      "dia": "Sábado",
+      "horas": 3
+    },
+    {
+      "dia": "Domingo",
+      "horas": 0
+    }
+  ],
+  "authLogin": []
 }
