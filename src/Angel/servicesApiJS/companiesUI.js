@@ -1,9 +1,9 @@
 /**
  * CONTROLADOR DE INTERFAZ DEL MÓDULO EMPRESAS CLIENTES
  */
-import { CompanyService } from '../servicesApi/companyService.js';
-import { CompanyState } from '../state/companyState.js';
-import { logoutUser } from '../servicesApi/api.js';
+import { CompanyService } from './companyService.js';
+import { CompanyState } from './companyState.js';
+import { logoutUser } from './api.js';
 
 const state = new CompanyState();
 
