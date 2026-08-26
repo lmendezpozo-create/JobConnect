@@ -1,15 +1,11 @@
-import { crearHeader } from '../../components/header.js';
-import { crearSidebar } from '../../components/sidebar.js';
+import { crearHeader } from './components/header.js';
+import { crearSidebar } from './components/sidebar.js';
 import { renderizarPaginaVacantes } from './vacantes.js';
 
 /**
  * Punto de entrada de la aplicación MALKA.
- *
  * Arma el layout general (header + sidebar + contenido) y monta el
- * módulo de Vacantes en el área de contenido. La navegación hacia los
- * demás módulos (Candidatos, Empresas, Postulaciones, Entrevistas/Notas,
- * Tareas) queda preparada en el sidebar para que el resto del equipo
- * conecte sus propias páginas.
+ * módulo de Vacantes en el área de contenido.
  */
 function iniciarApp() {
   const app = document.getElementById('app');
@@ -24,8 +20,6 @@ function iniciarApp() {
   const sidebar = crearSidebar({
     activo: 'vacantes',
     onNavigate: (idModulo) => {
-      // Espacio reservado: aquí el resto del equipo puede enrutar
-      // hacia sus propias páginas cuando integren su módulo.
       if (idModulo === 'vacantes') {
         renderizarPaginaVacantes(contenido);
       }

@@ -1,5 +1,5 @@
 /**
- * CONTROLADOR DE INTERFAZ DEL MÓDULO EMPRESAS CLIENTES
+ * CONTROLADOR DE INTERFAZ DEL MÓDULO EMPRESAS CLIENTES — Angel (adaptado)
  */
 import { CompanyService } from './companyService.js';
 import { CompanyState } from './companyState.js';
@@ -7,24 +7,23 @@ import { logoutUser } from './api.js';
 
 const state = new CompanyState();
 
-// Elementos del DOM
 const form = document.getElementById('company-form');
 const inputId = document.getElementById('company-id');
-const inputUserId = document.getElementById('company-userId');
-const inputTotal = document.getElementById('company-total');
+const inputNombre = document.getElementById('company-nombre');
+const inputContacto = document.getElementById('company-contacto');
+const inputTelefono = document.getElementById('company-telefono');
+const inputDireccion = document.getElementById('company-direccion');
+const inputSector = document.getElementById('company-sector');
 const tableBody = document.getElementById('companies-table-body');
 const btnCancel = document.getElementById('btn-cancel');
 const btnLogout = document.getElementById('btn-logout');
 
-/**
- * Renderiza dinámicamente las filas de la tabla según el estado local
- */
 function renderTable() {
   const companies = state.getCompanies();
   tableBody.innerHTML = '';
 
   if (!companies || companies.length === 0) {
-    tableBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay empresas registradas.</td></tr>';
+    tableBody.innerHTML = '<tr><td colspan="6" style="text-align:center;">No hay empresas registradas.</td></tr>';
     return;
   }
 
@@ -32,42 +31,41 @@ function renderTable() {
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${company.id}</td>
-      <td>Usuario ID: ${company.userId}</td>
-      <td>$${Number(company.total || 0).toFixed(2)}</td>
+      <td>${company.nombre || '—'}</td>
+      <td>${company.contacto || '—'}</td>
+      <td>${company.telefono || '—'}</td>
+      <td>${company.sector || '—'}</td>
       <td>
-        <button class="glass-btn btn-edit" data-id="${company.id}">Editar</button>
-        <button class="glass-btn glass-btn-danger btn-delete" data-id="${company.id}">Eliminar</button>
+        <button class="btn btn-secondary btn-sm btn-edit" data-id="${company.id}">Editar</button>
+        <button class="btn btn-danger btn-sm btn-delete" data-id="${company.id}">Eliminar</button>
       </td>
     `;
     tableBody.appendChild(tr);
   });
 }
 
-/**
- * Carga inicial de datos desde la API (GET)
- */
 async function init() {
   if (state.getCompanies().length === 0) {
-    const { data, error } = await CompanyService.getAll({ limit: 6 });
-    if (!error && data?.carts) {
-      state.setCompanies(data.carts);
+    const { data, error } = await CompanyService.getAll();
+    if (!error && Array.isArray(data)) {
+      state.setCompanies(data);
     }
   }
   renderTable();
 }
 
-// Evento de Guardar (POST / PUT)
 form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const id = inputId.value;
   const payload = {
-    userId: Number(inputUserId.value),
-    total: Number(inputTotal.value),
-    products: []
+    nombre: inputNombre.value.trim(),
+    contacto: inputContacto.value.trim(),
+    telefono: inputTelefono.value.trim(),
+    direccion: inputDireccion.value.trim(),
+    sector: inputSector.value.trim()
   };
 
   if (id) {
-    // PUT: Actualización de empresa existente
     const { error } = await CompanyService.update(id, payload);
     if (!error) {
       state.updateCompany(id, { ...payload, id: Number(id) });
@@ -75,10 +73,9 @@ form.addEventListener('submit', async (e) => {
       renderTable();
     }
   } else {
-    // POST: Creación de nueva empresa
     const { data, error } = await CompanyService.create(payload);
     if (!error) {
-      const newCompany = { ...payload, id: data.id || Date.now() };
+      const newCompany = { ...payload, id: data?.id || Date.now() };
       state.addCompany(newCompany);
       resetForm();
       renderTable();
@@ -86,7 +83,6 @@ form.addEventListener('submit', async (e) => {
   }
 });
 
-// Eventos delegados de Editar y Eliminar (DELETE)
 tableBody.addEventListener('click', async (e) => {
   const id = e.target.dataset.id;
   if (!id) return;
@@ -102,20 +98,20 @@ tableBody.addEventListener('click', async (e) => {
   }
 
   if (e.target.classList.contains('btn-edit')) {
-    const company = state.getCompanies().find(item => item.id === Number(id));
+    const company = state.getCompanies().find(item => String(item.id) === String(id));
     if (company) {
       inputId.value = company.id;
-      inputUserId.value = company.userId;
-      inputTotal.value = company.total;
+      inputNombre.value = company.nombre || '';
+      inputContacto.value = company.contacto || '';
+      inputTelefono.value = company.telefono || '';
+      inputDireccion.value = company.direccion || '';
+      inputSector.value = company.sector || '';
       btnCancel.style.display = 'inline-block';
     }
   }
 });
 
-// Cancelar edición
 btnCancel.addEventListener('click', resetForm);
-
-// Evento de Cierre de Sesión
 btnLogout.addEventListener('click', logoutUser);
 
 function resetForm() {

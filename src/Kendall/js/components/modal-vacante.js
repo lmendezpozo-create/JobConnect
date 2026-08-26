@@ -1,5 +1,5 @@
-import { validarVacante, ESTADOS_VALIDOS, MODALIDADES_VALIDAS, CONTRATOS_VALIDOS } from '../utils/validaciones.js';
-import { formatearSalario, claseBadgeEstado } from '../utils/formateador.js';
+import { validarVacante, ESTADOS_VALIDOS, MODALIDADES_VALIDAS, CONTRATOS_VALIDOS } from '../validaciones.js';
+import { formatearSalario, claseBadgeEstado } from '../formateador.js';
 
 const VACIA = {
   titulo: '',
@@ -15,18 +15,12 @@ const VACIA = {
 
 /**
  * Abre un modal de creación/edición de vacante.
- *
- * @param {{
- *   modo: 'crear' | 'editar',
- *   vacante?: object,
- *   onGuardar: (datos: object) => Promise<void>|void
- * }} opciones
  */
 export function abrirModalFormulario({ modo = 'crear', vacante = null, onGuardar }) {
   const datosIniciales = modo === 'editar' && vacante ? { ...vacante } : { ...VACIA };
 
   const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
+  overlay.className = 'modal-overlay active';
 
   overlay.innerHTML = `
     <div class="modal-card" role="dialog" aria-modal="true">
@@ -119,11 +113,10 @@ export function abrirModalFormulario({ modo = 'crear', vacante = null, onGuardar
 
 /**
  * Abre un modal de solo lectura con el detalle de una vacante.
- * @param {object} vacante
  */
 export function abrirModalDetalle(vacante) {
   const overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
+  overlay.className = 'modal-overlay active';
 
   overlay.innerHTML = `
     <div class="modal-card" role="dialog" aria-modal="true">
@@ -132,43 +125,22 @@ export function abrirModalDetalle(vacante) {
         <button type="button" class="modal-card__close" aria-label="Cerrar">✕</button>
       </div>
       <div class="modal-card__body">
-        <div class="detalle-grid">
-          <div class="detalle-item detalle-item--full">
-            <span class="detalle-item__label">Título</span>
-            <span class="detalle-item__value">${vacante.titulo}</span>
+        <div class="form-grid" style="grid-template-columns:1fr 1fr;gap:14px 20px;">
+          <div class="form-field form-field--full">
+            <label>Título</label>
+            <div style="font-weight:600;font-size:15px;">${vacante.titulo}</div>
           </div>
-          <div class="detalle-item detalle-item--full">
-            <span class="detalle-item__label">Descripción</span>
-            <span class="detalle-item__value">${vacante.descripcion}</span>
+          <div class="form-field form-field--full">
+            <label>Descripción</label>
+            <div>${vacante.descripcion}</div>
           </div>
-          <div class="detalle-item">
-            <span class="detalle-item__label">Empresa</span>
-            <span class="detalle-item__value">${vacante.empresa}</span>
-          </div>
-          <div class="detalle-item">
-            <span class="detalle-item__label">Ubicación</span>
-            <span class="detalle-item__value">${vacante.ubicacion}</span>
-          </div>
-          <div class="detalle-item">
-            <span class="detalle-item__label">Modalidad</span>
-            <span class="detalle-item__value">${vacante.modalidad}</span>
-          </div>
-          <div class="detalle-item">
-            <span class="detalle-item__label">Tipo de contrato</span>
-            <span class="detalle-item__value">${vacante.tipoContrato}</span>
-          </div>
-          <div class="detalle-item">
-            <span class="detalle-item__label">Salario</span>
-            <span class="detalle-item__value">${formatearSalario(vacante.salario)}</span>
-          </div>
-          <div class="detalle-item">
-            <span class="detalle-item__label">Categoría</span>
-            <span class="detalle-item__value">${vacante.categoria}</span>
-          </div>
-          <div class="detalle-item">
-            <span class="detalle-item__label">Estado</span>
-            <span class="${claseBadgeEstado(vacante.estado)}">${vacante.estado}</span>
-          </div>
+          <div class="form-field"><label>Empresa</label><div>${vacante.empresa}</div></div>
+          <div class="form-field"><label>Ubicación</label><div>${vacante.ubicacion}</div></div>
+          <div class="form-field"><label>Modalidad</label><div>${vacante.modalidad || '—'}</div></div>
+          <div class="form-field"><label>Tipo de contrato</label><div>${vacante.tipoContrato || '—'}</div></div>
+          <div class="form-field"><label>Salario</label><div>${vacante.salario ? formatearSalario(vacante.salario) : '—'}</div></div>
+          <div class="form-field"><label>Categoría</label><div>${vacante.categoria || '—'}</div></div>
+          <div class="form-field"><label>Estado</label><span class="${claseBadgeEstado(vacante.estado)}">${vacante.estado}</span></div>
         </div>
       </div>
       <div class="modal-card__footer">
@@ -191,8 +163,6 @@ export function abrirModalDetalle(vacante) {
 
   return cerrar;
 }
-
-/* ===== Helpers de construcción de campos ===== */
 
 function campoTexto(nombre, etiqueta, valor = '', requerido = false, ancho = '') {
   return `

@@ -1,59 +1,35 @@
 /**
- * SERVICIO MÓDULO EMPRESAS CLIENTES (/carts)
- * Capa de datos para la gestión corporativa de JobConnect
+ * SERVICIO MÓDULO EMPRESAS CLIENTES — Angel (adaptado para json-server /empresas)
  */
 import { customFetch } from './api.js';
 
 export const CompanyService = {
-  /**
-   * Obtiene la lista de empresas clientes con parámetros de paginación
-   * @param {object} params - Parámetros de consulta { limit, skip }
-   */
-  async getAll({ limit = 10, skip = 0 } = {}) {
-    return await customFetch(`/carts?limit=${limit}&skip=${skip}`, {
-      method: 'GET'
-    });
+  async getAll() {
+    return await customFetch('/empresas', { method: 'GET' });
   },
 
-  /**
-   * Obtiene una empresa cliente por su ID
-   * @param {number|string} id - Identificador de la empresa
-   */
   async getById(id) {
     if (!id) throw new Error('El ID de la empresa es obligatorio.');
-    return await customFetch(`/carts/${id}`, { method: 'GET' });
+    return await customFetch(`/empresas/${id}`, { method: 'GET' });
   },
 
-  /**
-   * Registra una nueva empresa cliente (POST)
-   * @param {object} companyData - Datos de la empresa { userId, total, products }
-   */
   async create(companyData = {}) {
-    return await customFetch('/carts/add', {
+    return await customFetch('/empresas', {
       method: 'POST',
       body: JSON.stringify(companyData)
     });
   },
 
-  /**
-   * Actualiza los datos de una empresa registrada (PUT)
-   * @param {number|string} id - ID de la empresa a modificar
-   * @param {object} updatedFields - Objeto con los datos actualizados
-   */
   async update(id, updatedFields = {}) {
     if (!id) throw new Error('El ID de la empresa es obligatorio para actualizar.');
-    return await customFetch(`/carts/${id}`, {
+    return await customFetch(`/empresas/${id}`, {
       method: 'PUT',
       body: JSON.stringify(updatedFields)
     });
   },
 
-  /**
-   * Elimina un registro de empresa cliente (DELETE)
-   * @param {number|string} id - ID de la empresa a eliminar
-   */
   async remove(id) {
     if (!id) throw new Error('El ID de la empresa es obligatorio para eliminar.');
-    return await customFetch(`/carts/${id}`, { method: 'DELETE' });
+    return await customFetch(`/empresas/${id}`, { method: 'DELETE' });
   }
 };

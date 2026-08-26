@@ -1,37 +1,28 @@
-import { formatearSalario, truncarTexto, claseBadgeEstado } from '../utils/formateador.js';
-import { ESTADOS_VALIDOS } from '../utils/validaciones.js';
+import { formatearSalario, truncarTexto, claseBadgeEstado } from '../formateador.js';
+import { ESTADOS_VALIDOS } from '../validaciones.js';
 
 /**
  * Renderiza la tabla de vacantes dentro de un contenedor.
- *
- * @param {HTMLElement} contenedor
- * @param {Array<object>} vacantes
- * @param {{
- *   onVer: (id) => void,
- *   onEditar: (id) => void,
- *   onEliminar: (id) => void,
- *   onCambiarEstado: (id, nuevoEstado) => void
- * }} callbacks
  */
 export function renderizarTablaVacantes(contenedor, vacantes, callbacks) {
   const { onVer, onEditar, onEliminar, onCambiarEstado } = callbacks;
 
   if (!vacantes || vacantes.length === 0) {
     contenedor.innerHTML = `
-      <div class="estado-panel">
-        <div class="estado-panel__icon">🗂️</div>
-        <div class="estado-panel__title">No hay vacantes para mostrar</div>
-        <div class="estado-panel__text">Ajusta la búsqueda o los filtros, o crea una nueva vacante para comenzar.</div>
+      <div class="state-panel">
+        <div class="state-panel__icon">🗂️</div>
+        <div class="state-panel__title">No hay vacantes para mostrar</div>
+        <div class="state-panel__text">Ajusta la búsqueda o los filtros, o crea una nueva vacante para comenzar.</div>
       </div>
     `;
     return;
   }
 
   const wrap = document.createElement('div');
-  wrap.className = 'vacantes-table-wrap';
+  wrap.className = 'table-wrap';
 
   const tabla = document.createElement('table');
-  tabla.className = 'vacantes-table';
+  tabla.className = 'data-table';
   tabla.innerHTML = `
     <thead>
       <tr>
@@ -56,8 +47,8 @@ export function renderizarTablaVacantes(contenedor, vacantes, callbacks) {
     const fila = document.createElement('tr');
 
     fila.innerHTML = `
-      <td data-label="ID"><span class="vacantes-table__id">#${vacante.id}</span></td>
-      <td data-label="Título"><span class="vacantes-table__titulo">${escapeHtml(vacante.titulo)}</span></td>
+      <td data-label="ID"><span class="data-table__id">#${vacante.id}</span></td>
+      <td data-label="Título"><span class="data-table__title">${escapeHtml(vacante.titulo)}</span></td>
       <td data-label="Empresa">${escapeHtml(vacante.empresa)}</td>
       <td data-label="Ubicación">${escapeHtml(vacante.ubicacion)}</td>
       <td data-label="Modalidad">${escapeHtml(vacante.modalidad)}</td>
@@ -68,14 +59,13 @@ export function renderizarTablaVacantes(contenedor, vacantes, callbacks) {
       <td data-label="Acciones"></td>
     `;
 
-    // Celda de estado: badge + select para demostrar PATCH ("Cambiar estado")
     const celdaEstado = fila.children[8];
     const badge = document.createElement('span');
     badge.className = claseBadgeEstado(vacante.estado);
     badge.textContent = vacante.estado;
 
     const selectEstado = document.createElement('select');
-    selectEstado.className = 'estado-select';
+    selectEstado.className = 'status-select';
     selectEstado.title = 'Cambiar estado (PATCH)';
     ESTADOS_VALIDOS.forEach((estado) => {
       const opcion = document.createElement('option');
@@ -95,19 +85,12 @@ export function renderizarTablaVacantes(contenedor, vacantes, callbacks) {
     celdaEstado.appendChild(badge);
     celdaEstado.appendChild(selectEstado);
 
-    // Celda de acciones
     const celdaAcciones = fila.children[9];
-    celdaAcciones.className = 'vacantes-table__acciones';
+    celdaAcciones.className = 'data-table__actions';
 
-    celdaAcciones.appendChild(
-      crearBotonAccion('Ver', 'btn-secondary', () => onVer(vacante.id))
-    );
-    celdaAcciones.appendChild(
-      crearBotonAccion('Editar', 'btn-secondary', () => onEditar(vacante.id))
-    );
-    celdaAcciones.appendChild(
-      crearBotonAccion('Eliminar', 'btn-danger', () => onEliminar(vacante.id))
-    );
+    celdaAcciones.appendChild(crearBoton('Ver', 'btn-secondary', () => onVer(vacante.id)));
+    celdaAcciones.appendChild(crearBoton('Editar', 'btn-secondary', () => onEditar(vacante.id)));
+    celdaAcciones.appendChild(crearBoton('Eliminar', 'btn-danger', () => onEliminar(vacante.id)));
 
     tbody.appendChild(fila);
   });
@@ -117,7 +100,7 @@ export function renderizarTablaVacantes(contenedor, vacantes, callbacks) {
   contenedor.appendChild(wrap);
 }
 
-function crearBotonAccion(texto, clase, onClick) {
+function crearBoton(texto, clase, onClick) {
   const boton = document.createElement('button');
   boton.type = 'button';
   boton.className = `btn ${clase} btn-sm`;
@@ -128,9 +111,5 @@ function crearBotonAccion(texto, clase, onClick) {
 
 function escapeHtml(valor) {
   if (valor === undefined || valor === null) return '';
-  return String(valor)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
+  return String(valor).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }

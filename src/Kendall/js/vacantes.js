@@ -6,16 +6,14 @@ import {
   actualizarVacantePATCH,
   eliminarVacante,
   ApiError
-} from '../../services/vacantes.service.js';
-import { renderizarTablaVacantes } from '../../components/tabla-vacantes.js';
-import { abrirModalFormulario, abrirModalDetalle } from '../../components/modal-vacante.js';
-import { toastExito, toastError } from '../../components/feedback.js';
-import { ESTADOS_VALIDOS, MODALIDADES_VALIDAS } from '../../utils/validaciones.js';
+} from './vacantes.service.js';
+import { renderizarTablaVacantes } from './components/tabla-vacantes.js';
+import { abrirModalFormulario, abrirModalDetalle } from './components/modal-vacante.js';
+import { toastExito, toastError } from './components/feedback.js';
+import { ESTADOS_VALIDOS, MODALIDADES_VALIDAS } from './validaciones.js';
 
 /**
- * Renderiza la página completa del módulo de Vacantes dentro del
- * contenedor recibido.
- * @param {HTMLElement} contenedor
+ * Renderiza la página completa del módulo de Vacantes dentro del contenedor.
  */
 export function renderizarPaginaVacantes(contenedor) {
   const estado = {
@@ -29,31 +27,31 @@ export function renderizarPaginaVacantes(contenedor) {
       <div>
         <h1 class="page-header__title">Vacantes</h1>
         <p class="page-header__subtitle">
-          Administra las vacantes publicadas por MALKA: crea, edita, filtra y da seguimiento
+          Administra las vacantes publicadas: crea, edita, filtra y da seguimiento
           al estado de cada oportunidad laboral.
         </p>
       </div>
       <button type="button" class="btn btn-primary" id="btn-nueva-vacante">+ Nueva vacante</button>
     </div>
 
-    <div class="vacantes-toolbar">
-      <div class="vacantes-toolbar__search">
-        <span class="vacantes-toolbar__search-icon">🔎</span>
+    <div class="toolbar">
+      <div class="toolbar__search">
+        <span class="toolbar__search-icon">🔎</span>
         <input type="text" id="input-busqueda" placeholder="Buscar por título, empresa o ubicación..." />
       </div>
-      <div class="vacantes-toolbar__filter">
+      <div class="toolbar__filter">
         <select id="filtro-estado">
           <option value="">Todos los estados</option>
           ${ESTADOS_VALIDOS.map((e) => `<option value="${e}">${e}</option>`).join('')}
         </select>
       </div>
-      <div class="vacantes-toolbar__filter">
+      <div class="toolbar__filter">
         <select id="filtro-modalidad">
           <option value="">Todas las modalidades</option>
           ${MODALIDADES_VALIDAS.map((m) => `<option value="${m}">${m}</option>`).join('')}
         </select>
       </div>
-      <button type="button" class="vacantes-toolbar__clear" id="btn-limpiar-filtros">Limpiar filtros</button>
+      <button type="button" class="toolbar__clear" id="btn-limpiar-filtros">Limpiar filtros</button>
     </div>
 
     <div id="vacantes-resultado"></div>
@@ -96,19 +94,9 @@ export function renderizarPaginaVacantes(contenedor) {
 
   function mostrarCargando() {
     resultado.innerHTML = `
-      <div class="estado-panel">
+      <div class="state-panel">
         <div class="spinner"></div>
-        <div class="estado-panel__title">Cargando vacantes...</div>
-      </div>
-    `;
-  }
-
-  function mostrarErrorConexion(mensaje) {
-    resultado.innerHTML = `
-      <div class="estado-panel">
-        <div class="estado-panel__icon">⚠️</div>
-        <div class="estado-panel__title">No se pudo cargar la información</div>
-        <div class="estado-panel__text">${mensaje}</div>
+        <div class="state-panel__title">Cargando vacantes...</div>
       </div>
     `;
   }
@@ -125,8 +113,13 @@ export function renderizarPaginaVacantes(contenedor) {
         onCambiarEstado: cambiarEstado
       });
     } catch (error) {
-      manejarErrorApi(error, 'No se pudo cargar la información.');
-      mostrarErrorConexion(mensajeDeError(error));
+      resultado.innerHTML = `
+        <div class="state-panel">
+          <div class="state-panel__icon">⚠️</div>
+          <div class="state-panel__title">No se pudo cargar la información</div>
+          <div class="state-panel__text">${error instanceof ApiError ? error.message : 'Verifica que JSON Server esté ejecutándose.'}</div>
+        </div>
+      `;
     }
   }
 
@@ -135,7 +128,7 @@ export function renderizarPaginaVacantes(contenedor) {
       const vacante = await obtenerVacantePorId(id);
       abrirModalDetalle(vacante);
     } catch (error) {
-      manejarErrorApi(error, 'No se pudo obtener el detalle de la vacante.');
+      toastError('No se pudo obtener el detalle de la vacante.');
     }
   }
 
@@ -148,7 +141,7 @@ export function renderizarPaginaVacantes(contenedor) {
           toastExito('Vacante creada correctamente.');
           await cargarVacantes();
         } catch (error) {
-          manejarErrorApi(error, 'No se pudo crear la vacante.');
+          toastError('No se pudo crear la vacante.');
           throw error;
         }
       }
@@ -163,29 +156,27 @@ export function renderizarPaginaVacantes(contenedor) {
         vacante,
         onGuardar: async (datos) => {
           try {
-            // "Editar vacante" reemplaza el recurso completo -> PUT
             await actualizarVacantePUT(id, datos);
             toastExito('Vacante actualizada correctamente.');
             await cargarVacantes();
           } catch (error) {
-            manejarErrorApi(error, 'No se pudo actualizar la vacante.');
+            toastError('No se pudo actualizar la vacante.');
             throw error;
           }
         }
       });
     } catch (error) {
-      manejarErrorApi(error, 'No se pudo cargar la vacante para editar.');
+      toastError('No se pudo cargar la vacante para editar.');
     }
   }
 
   async function cambiarEstado(id, nuevoEstado) {
     try {
-      // Cambio rápido de estado -> PATCH: solo se modifica ese campo
       await actualizarVacantePATCH(id, { estado: nuevoEstado });
       toastExito('Estado de vacante actualizado.');
       await cargarVacantes();
     } catch (error) {
-      manejarErrorApi(error, 'No se pudo actualizar el estado.');
+      toastError('No se pudo actualizar el estado.');
       await cargarVacantes();
     }
   }
@@ -201,19 +192,8 @@ export function renderizarPaginaVacantes(contenedor) {
       toastExito('Vacante eliminada correctamente.');
       await cargarVacantes();
     } catch (error) {
-      manejarErrorApi(error, 'No se pudo eliminar la vacante.');
+      toastError('No se pudo eliminar la vacante.');
     }
-  }
-
-  function manejarErrorApi(error, mensajePorDefecto) {
-    toastError(mensajeDeError(error) || mensajePorDefecto);
-  }
-
-  function mensajeDeError(error) {
-    if (error instanceof ApiError) {
-      return error.message;
-    }
-    return 'Ocurrió un error al conectar con el servidor.';
   }
 
   cargarVacantes();
