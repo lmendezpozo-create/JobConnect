@@ -1,0 +1,76 @@
+/*
+ * Paleta de colores oficial del proyecto
+ * https://coolors.co/7b6b43-6b0504-3a506b-dae3e5-e5f4e3
+ */
+:root {
+  /* Colores base de la paleta */
+  --olive-wood: #7b6b43ff;
+  --dark-garnet: #6b0504ff;
+  --dusk-blue: #3a506bff;
+  --alabaster-grey: #dae3e5ff;
+  --honeydew: #e5f4e3ff;
+
+  /* Tokens semánticos usados en toda la app (mapeados a la paleta) */
+  --color-primary: var(--dusk-blue);
+  --color-primary-light: #4f6a89;
+  --color-primary-dark: #253647;
+
+  --color-accent: var(--olive-wood);
+  --color-accent-dark: #5c4f30;
+
+  --color-bg: var(--alabaster-grey);
+  --color-surface: #ffffff;
+  --color-text: #1e2532;
+  --color-text-muted: #5c6770;
+  --color-border: #c7d2d5;
+
+  --color-success: #1f7a46;
+  --color-success-bg: var(--honeydew);
+  --color-error: var(--dark-garnet);
+  --color-error-bg: #f4dad9;
+  --color-warning: #8a6d1f;
+  --color-warning-bg: #f3ecd6;
+  --color-info: #2c5273;
+  --color-info-bg: #e4ebf0;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.08);
+  --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.12);
+
+  --font-sans: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+
+  --sidebar-width: 250px;
+  --header-height: 64px;
+
+  --transition: 160ms ease;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, select, textarea {
+  font-family: inherit;
+}
+
+a {
+  color: inherit;
+}

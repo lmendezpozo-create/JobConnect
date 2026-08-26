@@ -1,0 +1,112 @@
+{
+  "vacantes": [
+    {
+      "id": 1,
+      "titulo": "Desarrollador Frontend",
+      "descripcion": "Responsable del desarrollo y mantenimiento de interfaces web utilizando frameworks modernos, asegurando buenas prácticas de accesibilidad y rendimiento.",
+      "empresa": "MALKA",
+      "ubicacion": "San José, Costa Rica",
+      "modalidad": "Híbrido",
+      "salario": 850000,
+      "tipoContrato": "Tiempo completo",
+      "categoria": "Tecnología",
+      "estado": "Activa"
+    },
+    {
+      "id": 2,
+      "titulo": "Analista de Reclutamiento",
+      "descripcion": "Encargado de la búsqueda, filtrado y coordinación de entrevistas para procesos de selección de personal en distintas áreas de la empresa.",
+      "empresa": "MALKA",
+      "ubicacion": "Heredia, Costa Rica",
+      "modalidad": "Presencial",
+      "salario": 620000,
+      "tipoContrato": "Tiempo completo",
+      "categoria": "Recursos Humanos",
+      "estado": "Activa"
+    },
+    {
+      "id": 3,
+      "titulo": "Contador Junior",
+      "descripcion": "Apoyo en el registro contable, conciliaciones bancarias y elaboración de reportes financieros mensuales.",
+      "empresa": "MALKA",
+      "ubicacion": "Cartago, Costa Rica",
+      "modalidad": "Presencial",
+      "salario": 550000,
+      "tipoContrato": "Medio tiempo",
+      "categoria": "Contabilidad",
+      "estado": "Pausada"
+    },
+    {
+      "id": 4,
+      "titulo": "Practicante de Marketing Digital",
+      "descripcion": "Apoyo en la creación de contenido para redes sociales y campañas digitales, ideal para estudiantes activos.",
+      "empresa": "MALKA",
+      "ubicacion": "Remoto",
+      "modalidad": "Remoto",
+      "salario": 250000,
+      "tipoContrato": "Práctica profesional",
+      "categoria": "Mercadeo",
+      "estado": "Cerrada"
+    },
+    {
+      "id": 5,
+      "titulo": "Desarrollador Backend Node.js",
+      "descripcion": "Diseño y mantenimiento de APIs REST, integración con bases de datos y optimización de rendimiento del servidor.",
+      "empresa": "MALKA",
+      "ubicacion": "San José, Costa Rica",
+      "modalidad": "Híbrido",
+      "salario": 950000,
+      "tipoContrato": "Tiempo completo",
+      "categoria": "Tecnología",
+      "estado": "Activa"
+    },
+    {
+      "id": 6,
+      "titulo": "Desarrollador Full Stack",
+      "descripcion": "Desarrollo de funcionalidades end-to-end, desde la interfaz hasta la capa de datos, trabajando con JavaScript moderno.",
+      "empresa": "MALKA",
+      "ubicacion": "Remoto",
+      "modalidad": "Remoto",
+      "salario": 1100000,
+      "tipoContrato": "Tiempo completo",
+      "categoria": "Tecnología",
+      "estado": "Activa"
+    },
+    {
+      "id": 7,
+      "titulo": "QA Tester / Automatización",
+      "descripcion": "Diseño y ejecución de pruebas manuales y automatizadas para garantizar la calidad del software antes de cada liberación.",
+      "empresa": "MALKA",
+      "ubicacion": "Heredia, Costa Rica",
+      "modalidad": "Híbrido",
+      "salario": 780000,
+      "tipoContrato": "Tiempo completo",
+      "categoria": "Tecnología",
+      "estado": "Pausada"
+    },
+    {
+      "id": 8,
+      "titulo": "Administrador de Bases de Datos",
+      "descripcion": "Gestión, respaldo y optimización de bases de datos relacionales, así como monitoreo de rendimiento e integridad de la información.",
+      "empresa": "MALKA",
+      "ubicacion": "San José, Costa Rica",
+      "modalidad": "Presencial",
+      "salario": 1000000,
+      "tipoContrato": "Tiempo completo",
+      "categoria": "Tecnología",
+      "estado": "Activa"
+    },
+    {
+      "id": 9,
+      "titulo": "Practicante de Desarrollo de Software",
+      "descripcion": "Apoyo al equipo de desarrollo en tareas de programación, pruebas y documentación técnica, ideal para estudiantes avanzados.",
+      "empresa": "MALKA",
+      "ubicacion": "Remoto",
+      "modalidad": "Remoto",
+      "salario": 300000,
+      "tipoContrato": "Práctica profesional",
+      "categoria": "Tecnología",
+      "estado": "Activa"
+    }
+  ]
+}
