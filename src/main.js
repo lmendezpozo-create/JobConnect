@@ -87,6 +87,41 @@ appEl.innerHTML = `
   <p class="data-mode" id="data-mode" aria-live="polite" hidden></p>
 `
 
+// ── Utilidades de presentación y red (locales a este módulo) ───────
+const escapeHtml = (value = '') =>
+  String(value).replace(/[&<>"']/g, (c) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  }[c]));
+
+const formatDate = (value) => {
+  if (!value) return 'Sin fecha';
+  const d = new Date(value);
+  return Number.isNaN(d.getTime()) ? value : d.toLocaleDateString();
+};
+
+const STATUS_LABELS = {
+  pending: 'Pendiente',
+  'in-progress': 'En Progreso',
+  completed: 'Completada',
+  cancelled: 'Cancelada',
+  scheduled: 'Programada',
+};
+const statusLabel = (s) => STATUS_LABELS[s] || s;
+
+const PRIORITY_LABELS = { low: 'Baja', medium: 'Media', high: 'Alta' };
+const priorityLabel = (p) => PRIORITY_LABELS[p] || p;
+
+// Petición contra el json-server; lanza error si la API no está en línea.
+const fetchJson = async (endpoint) => {
+  const res = await fetch(`http://localhost:3000${endpoint}`);
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+  return res.json();
+};
+
 // ── Render de estadísticas ────────────────────────────────────────
 const renderStats = (data) => {
   const statsEl = document.querySelector('#stats')
