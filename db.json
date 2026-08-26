@@ -532,5 +532,11 @@
       "horas": 0
     }
   ],
-  "authLogin": []
+  "authLogin": [
+    {
+      "userId": 1,
+      "createdAt": "2026-08-26T23:44:22.980Z",
+      "id": 1
+    }
+  ]
 }
