@@ -1,23 +1,24 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- ============================================
+       META & SEO
+       ============================================ -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Gestión de Tareas del Reclutador" />
-  <title>Tareas | Sistema de Reclutamiento</title>
+  <meta name="description" content="Gestión de Entrevistas y Notas del proceso de reclutamiento" />
+  <title>Entrevistas | Sistema de Reclutamiento</title>
 
   <!-- ============================================
        ESTILOS (orden: base → componentes → página)
        ============================================ -->
-  <link rel="stylesheet" href="./css/base.css" />
-  <link rel="stylesheet" href="./css/components.css" />
-  <link rel="stylesheet" href="./css/todos.css" />
+  <link rel="stylesheet" href="./src/style.css" />
 </head>
 
 <body>
 
   <!-- ==================================================
-       HEADER: Navegación principal
+       HEADER: Navegación principal + título de sección
        ================================================== -->
   <header class="header" role="banner">
     <nav class="header__nav" aria-label="Navegación principal">
@@ -31,28 +32,28 @@
           <a href="./index.html" class="header__menu-link" role="menuitem">Inicio</a>
         </li>
         <li class="header__menu-item" role="none">
-          <a href="./interviews.html" class="header__menu-link" role="menuitem">Entrevistas</a>
-        </li>
-        <li class="header__menu-item" role="none">
-          <a href="./todos.html"
+          <a href="./interviews.html"
              class="header__menu-link header__menu-link--active"
              role="menuitem"
              aria-current="page">
-            Tareas
+            Entrevistas
           </a>
+        </li>
+        <li class="header__menu-item" role="none">
+          <a href="./todos.html" class="header__menu-link" role="menuitem">Tareas</a>
         </li>
       </ul>
     </nav>
   </header>
 
   <!-- ==================================================
-       MAIN: Contenido principal
+       MAIN: Contenido principal de la página
        ================================================== -->
-  <main class="todos" role="main" id="todos-app">
+  <main class="interviews" role="main" id="interviews-app">
 
     <!-- ── Encabezado de sección ── -->
-    <header class="todos__header">
-      <h1 class="todos__title">Tareas del Reclutador</h1>
+    <header class="interviews__header">
+      <h1 class="interviews__title">Entrevistas / Notas</h1>
       <button
         type="button"
         class="btn btn--primary"
@@ -61,13 +62,15 @@
         data-mode="create"
         aria-haspopup="dialog"
       >
-        <span aria-hidden="true">+</span> Nueva Tarea
+        <span aria-hidden="true">+</span> Nueva Entrevista
       </button>
     </header>
 
-    <!-- ── Alerta de error global ── -->
+    <!-- ── Contenedor de alertas de error global ──
+         El JS inyecta aquí el mensaje de error del interceptor
+         o de cualquier petición fallida. Se oculta con [hidden]. -->
     <div
-      class="todos__error alert alert--error"
+      class="interviews__error alert alert--error"
       id="error-banner"
       role="alert"
       aria-live="assertive"
@@ -85,61 +88,59 @@
       </button>
     </div>
 
-    <!-- ── Indicador de carga ── -->
+    <!-- ── Indicador de carga inicial ──
+         Visible mientras fetchAll() está en curso
+         y la lista aún está vacía. -->
     <div
-      class="todos__loading"
+      class="interviews__loading"
       id="loading-indicator"
       role="status"
       aria-live="polite"
       hidden
     >
       <span class="spinner" aria-hidden="true"></span>
-      <p>Cargando tareas…</p>
+      <p>Cargando entrevistas…</p>
     </div>
 
-    <!-- ── Estado vacío ── -->
+    <!-- ── Estado vacío ──
+         Se muestra cuando la API devuelve un array vacío. -->
     <section
-      class="todos__empty"
+      class="interviews__empty"
       id="empty-state"
-      aria-label="Sin tareas registradas"
+      aria-label="Sin entrevistas registradas"
       hidden
     >
-      <p class="todos__empty-icon" aria-hidden="true">✅</p>
-      <p class="todos__empty-text">No hay tareas registradas</p>
+      <p class="interviews__empty-icon" aria-hidden="true">📭</p>
+      <p class="interviews__empty-text">No hay entrevistas registradas</p>
     </section>
 
-    <!-- ── Lista de tareas ──
-         El JS genera una <article> por cada item de /all.
-         data-entity="task" identifica el tipo de entidad. -->
+    <!-- ── Lista de entrevistas ──
+         El JS itera sobre el array de /comments y genera
+         una <article> por cada registro dentro de este contenedor.
+         data-entity="interview" permite al JS identificar el tipo. -->
     <section
-      class="todos__list"
-      id="todos-list"
-      data-entity="task"
-      aria-label="Listado de tareas del reclutador"
+      class="interviews__list"
+      id="interviews-list"
+      data-entity="interview"
+      aria-label="Listado de entrevistas"
     >
       <!-- ═══════════════════════════════════════════════
-           PLANTILLA DE TARJETA DE TAREA (referencia)
-           El JS genera esta estructura dinámicamente.
-           Se incluye como comentario para documentar
-           los data-attributes esperados.
+           PLANTILLA DE TARJETA (referencia para el JS)
+           El JS clona/genera esta estructura por item.
+           Se deja un ejemplo estático como referencia visual.
            ═══════════════════════════════════════════════ -->
       <!--
-      <article class="todo-card todo-card--priority-high" data-id="1" data-entity="task">
-        <div class="todo-card__content">
-          <div class="todo-card__header">
-            <h3 class="todo-card__title">Título de la tarea</h3>
-            <span class="todo-card__priority-badge todo-card__priority-badge--high">Alta</span>
-          </div>
-          <p class="todo-card__description">Descripción…</p>
-          <div class="todo-card__meta">
-            <span class="todo-card__date">Vence: 28/08/2026</span>
-            <span class="todo-card__status-badge todo-card__status-badge--pending">Pendiente</span>
-          </div>
+      <article class="interview-card" data-id="1" data-entity="interview">
+        <div class="interview-card__content">
+          <h3 class="interview-card__candidate">Nombre Candidato</h3>
+          <p class="interview-card__position">Posición</p>
+          <p class="interview-card__date">Fecha: 01/09/2026</p>
+          <p class="interview-card__notes">Notas opcionales…</p>
         </div>
-        <div class="todo-card__actions">
-          <select class="todo-card__status-select" data-field="status" aria-label="Cambiar estado">
+        <div class="interview-card__actions">
+          <select class="interview-card__status" data-field="status" aria-label="Cambiar estado">
             <option value="pending">Pendiente</option>
-            <option value="in-progress">En Progreso</option>
+            <option value="scheduled">Programada</option>
             <option value="completed">Completada</option>
             <option value="cancelled">Cancelada</option>
           </select>
@@ -153,24 +154,25 @@
   </main>
 
   <!-- ==================================================
-       MODAL: Formulario Crear / Editar Tarea
-       data-mode="create|edit" controla si el submit
-       ejecuta POST (crear) o PUT (edición completa).
+       MODAL: Formulario Crear / Editar Entrevista
+       El JS controla la visibilidad con [hidden] o clase.
+       data-mode="create|edit" indica la operación actual.
        ================================================== -->
   <div
     class="modal"
-    id="todo-modal"
+    id="interview-modal"
     data-mode="create"
     role="dialog"
     aria-modal="true"
     aria-labelledby="modal-title"
     hidden
   >
+    <!-- Overlay: clic fuera cierra el modal -->
     <div class="modal__overlay" id="modal-overlay" data-action="close-modal"></div>
 
     <div class="modal__container">
       <header class="modal__header">
-        <h2 class="modal__title" id="modal-title">Nueva Tarea</h2>
+        <h2 class="modal__title" id="modal-title">Nueva Entrevista</h2>
         <button
           type="button"
           class="modal__close-btn"
@@ -183,100 +185,101 @@
       </header>
 
       <div class="modal__body">
-        <!-- ── Formulario de Tarea ──
-             En modo "edit": el JS ejecuta PUT /all/:id (edición completa)
-             En modo "create": el JS ejecuta POST /all -->
+        <!-- ── Formulario de Entrevista ──
+             action="" evita navegación; el JS previene el submit
+             y ejecuta POST (crear) o PATCH (editar) según data-mode. -->
         <form
-          class="todo-form"
-          id="todo-form"
-          data-entity="task"
+          class="interview-form"
+          id="interview-form"
+          data-entity="interview"
           novalidate
         >
-          <!-- ID oculto para modo edición -->
+          <!-- Campo oculto: ID del registro en modo edición.
+               El JS lo setea al abrir el modal en modo "edit". -->
           <input type="hidden" name="id" id="field-id" value="" />
 
-          <!-- Título -->
+          <!-- Candidato -->
           <div class="form-group">
-            <label class="form-group__label" for="field-title">
-              Título <span class="form-group__required" aria-hidden="true">*</span>
+            <label class="form-group__label" for="field-candidate">
+              Candidato <span class="form-group__required" aria-hidden="true">*</span>
             </label>
             <input
               type="text"
               class="form-group__input"
-              id="field-title"
-              name="title"
-              placeholder="Ingresa el título de la tarea"
+              id="field-candidate"
+              name="candidate"
+              placeholder="Nombre completo del candidato"
               required
-              minlength="3"
+              autocomplete="name"
               aria-required="true"
-              aria-describedby="error-title"
+              aria-describedby="error-candidate"
             />
-            <span class="form-group__error" id="error-title" role="alert" hidden></span>
+            <span class="form-group__error" id="error-candidate" role="alert" hidden></span>
           </div>
 
-          <!-- Descripción -->
+          <!-- Posición -->
           <div class="form-group">
-            <label class="form-group__label" for="field-description">Descripción</label>
-            <textarea
-              class="form-group__textarea"
-              id="field-description"
-              name="description"
-              rows="4"
-              placeholder="Describe la tarea (opcional)"
-            ></textarea>
+            <label class="form-group__label" for="field-position">
+              Posición <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="text"
+              class="form-group__input"
+              id="field-position"
+              name="position"
+              placeholder="Ej. Desarrollador Frontend"
+              required
+              aria-required="true"
+              aria-describedby="error-position"
+            />
+            <span class="form-group__error" id="error-position" role="alert" hidden></span>
           </div>
 
-          <!-- Fila: Prioridad + Fecha -->
-          <div class="form-row">
-            <!-- Prioridad -->
-            <div class="form-group">
-              <label class="form-group__label" for="field-priority">Prioridad</label>
-              <select
-                class="form-group__select"
-                id="field-priority"
-                name="priority"
-              >
-                <option value="low">Baja</option>
-                <option value="medium" selected>Media</option>
-                <option value="high">Alta</option>
-              </select>
-            </div>
-
-            <!-- Fecha de vencimiento -->
-            <div class="form-group">
-              <label class="form-group__label" for="field-dueDate">
-                Fecha de vencimiento
-                <span class="form-group__required" aria-hidden="true">*</span>
-              </label>
-              <input
-                type="date"
-                class="form-group__input"
-                id="field-dueDate"
-                name="dueDate"
-                required
-                aria-required="true"
-                aria-describedby="error-dueDate"
-              />
-              <span class="form-group__error" id="error-dueDate" role="alert" hidden></span>
-            </div>
+          <!-- Fecha -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-date">
+              Fecha <span class="form-group__required" aria-hidden="true">*</span>
+            </label>
+            <input
+              type="date"
+              class="form-group__input"
+              id="field-date"
+              name="date"
+              required
+              aria-required="true"
+              aria-describedby="error-date"
+            />
+            <span class="form-group__error" id="error-date" role="alert" hidden></span>
           </div>
 
-          <!-- Estado (visible solo en modo edición) -->
-          <div class="form-group" id="status-field-group" hidden>
+          <!-- Estado -->
+          <div class="form-group">
             <label class="form-group__label" for="field-status">Estado</label>
             <select
               class="form-group__select"
               id="field-status"
               name="status"
             >
-              <option value="pending">Pendiente</option>
-              <option value="in-progress">En Progreso</option>
+              <option value="pending" selected>Pendiente</option>
+              <option value="scheduled">Programada</option>
               <option value="completed">Completada</option>
               <option value="cancelled">Cancelada</option>
             </select>
           </div>
 
-          <!-- Acciones -->
+          <!-- Notas -->
+          <div class="form-group">
+            <label class="form-group__label" for="field-notes">Notas</label>
+            <textarea
+              class="form-group__textarea"
+              id="field-notes"
+              name="notes"
+              rows="4"
+              placeholder="Observaciones sobre la entrevista…"
+            ></textarea>
+          </div>
+
+          <!-- Acciones del formulario -->
           <footer class="form-actions">
             <button
               type="button"
@@ -299,8 +302,9 @@
   </div>
 
   <!-- ==================================================
-       CONFIRM DIALOG: Eliminación de Tarea
-       El JS ejecuta DELETE /all/:id al confirmar.
+       CONFIRM DIALOG: Eliminación de Entrevista
+       El JS muestra este diálogo al hacer clic en "Eliminar"
+       y ejecuta DELETE /comments/:id al confirmar.
        ================================================== -->
   <div
     class="confirm-dialog"
@@ -316,11 +320,12 @@
     <div class="confirm-dialog__container">
       <header class="confirm-dialog__header">
         <h3 class="confirm-dialog__title" id="delete-dialog-title">
-          Eliminar Tarea
+          Eliminar Entrevista
         </h3>
       </header>
 
       <div class="confirm-dialog__body">
+        <!-- El JS inyecta el nombre del candidato aquí -->
         <p class="confirm-dialog__message" id="delete-dialog-message"></p>
       </div>
 
@@ -349,19 +354,22 @@
        ================================================== -->
   <footer class="footer" role="contentinfo">
     <p class="footer__text">
-      © 2026 Sistema de Reclutamiento — Módulo de Tareas
+      © 2026 Sistema de Reclutamiento — Módulo de Entrevistas
     </p>
   </footer>
 
   <!-- ==================================================
-       SCRIPTS (módulos ES6)
+       SCRIPTS (módulos ES6 — orden de carga)
+       1. Servicios (fetch + endpoints)
+       2. Componentes UI (modal, confirm)
+       3. Controlador de página (lógica principal)
        ================================================== -->
   <script type="module" src="./js/services/api.js"></script>
-  <script type="module" src="./js/services/recruiterTaskService.js"></script>
+  <script type="module" src="./js/services/interviewService.js"></script>
   <script type="module" src="./js/hooks/useCrud.js"></script>
   <script type="module" src="./js/components/modal.js"></script>
   <script type="module" src="./js/components/confirmDialog.js"></script>
-  <script type="module" src="./js/pages/todos.controller.js"></script>
+  <script type="module" src="./js/pages/interviews.controller.js"></script>
 
 </body>
 </html>
