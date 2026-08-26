@@ -408,9 +408,10 @@
       "candidatoId": 4,
       "postulacionId": 2,
       "fecha": "2026-08-28T02:00",
-      "estado": "pendiente",
+      "estado": "realizada",
       "notas": "",
-      "id": 4
+      "id": 4,
+      "resultado": "aceptar"
     },
     {
       "candidato": "María García",
