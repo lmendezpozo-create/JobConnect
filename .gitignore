@@ -12,6 +12,30 @@ dist
 dist-ssr
 *.local
 
+# Secretos, credenciales y configuraciÃ³n local
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*credential*.json
+*credentials*.json
+*secret*.json
+*secrets*.json
+*password*.txt
+*token*.txt
+db.local.json
+db.secrets.json
+
+# Archivos de servicios cloud y despliegue con secretos
+serviceAccountKey.json
+firebase-adminsdk-*.json
+.vercel
+.netlify
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

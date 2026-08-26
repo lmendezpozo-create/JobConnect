@@ -1,0 +1,1 @@
+import{login,user,redirect}from'./auth.js';if(user())redirect();document.querySelector('#form').onsubmit=async e=>{e.preventDefault();const d=new FormData(e.target),err=document.querySelector('#error');err.textContent='';try{await login(d.get('username'),d.get('password'));redirect()}catch(x){err.textContent=x.message}};

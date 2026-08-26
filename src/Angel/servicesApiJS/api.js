@@ -4,12 +4,14 @@
 const BASE_URL = 'http://localhost:3000';
 
 export function getAuthToken() {
-  return localStorage.getItem('jobconnect_session');
+  return localStorage.getItem('jobconnect_token') || localStorage.getItem('jobconnect_session');
 }
 
 export function logoutUser() {
+  localStorage.removeItem('jobconnect_token');
+  localStorage.removeItem('jobconnect_user');
   localStorage.removeItem('jobconnect_session');
-  window.location.href = '../../../index.html';
+  window.location.href = '/';
 }
 
 export async function customFetch(endpoint, options = {}) {
@@ -17,6 +19,7 @@ export async function customFetch(endpoint, options = {}) {
     ...options,
     headers: {
       'Content-Type': 'application/json',
+      ...(getAuthToken() ? { Authorization: `Bearer ${getAuthToken()}` } : {}),
       ...options.headers
     }
   };
