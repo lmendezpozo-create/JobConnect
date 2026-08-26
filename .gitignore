@@ -1,0 +1,4 @@
+node_modules
+JobConnect
+.DS_Store
+*.log
