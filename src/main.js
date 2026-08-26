@@ -83,6 +83,8 @@ appEl.innerHTML = `
     </header>
     <div class="live__grid" id="live-grid"></div>
   </section>
+
+  <p class="data-mode" id="data-mode" aria-live="polite" hidden></p>
 `
 
 // ── Render de estadísticas ────────────────────────────────────────
@@ -171,9 +173,33 @@ const renderRecent = (data) => {
   if (grid.childElementCount) liveSection.hidden = false
 }
 
-// ── Carga principal ───────────────────────────────────────────────
+// ── Carga principal (API en vivo + fallback a db.json local) ───────
+const normalize = (root) => ({
+  entrevistas: root.entrevistas || [],
+  all: root.all || [],
+  vacantes: root.vacantes || [],
+  usuarios: root.usuarios || [],
+  comments: root.comments || [],
+})
+
+const setDataMode = (online) => {
+  const note = document.querySelector('#data-mode')
+  if (!note) return
+  if (online) {
+    note.textContent = '● Datos en vivo desde json-server (localhost:3000)'
+    note.className = 'data-mode data-mode--online'
+  } else {
+    note.textContent = '● json-server no detectado: mostrando db.json local'
+    note.className = 'data-mode data-mode--local'
+  }
+  note.hidden = false
+}
+
 const loadDashboard = async () => {
   const statsEl = document.querySelector('#stats')
+  let data = null
+  let online = true
+
   try {
     const [entrevistas, all = [], vacantes, usuarios, comments] = await Promise.all([
       fetchJson('/entrevistas'),
@@ -182,17 +208,30 @@ const loadDashboard = async () => {
       fetchJson('/usuarios'),
       fetchJson('/comments'),
     ])
-    renderStats({ entrevistas, all, vacantes, usuarios })
-    renderRecent({ all, comments })
+    data = { entrevistas, all, vacantes, usuarios, comments }
   } catch (err) {
-    console.error('No se pudo conectar con el data server', err)
-    if (statsEl) {
-      statsEl.classList.add('stats--error')
-      statsEl.innerHTML = `
-        <p class="stats__hint">No se pudo conectar con el servidor de datos (db.json).</p>
-        <p class="stats__hint">Inicia la API con <code>npm run server</code> en el puerto 3000.</p>
-      `
+    // API caída o sin json-server → cargamos db.json directamente
+    online = false
+    console.warn('API no disponible, usando db.json local', err)
+    try {
+      const d = await import('../db.json')
+      data = normalize(d.default)
+    } catch (err2) {
+      console.error('No se pudo leer db.json', err2)
+      data = null
     }
+  }
+
+  if (data) {
+    renderStats(data)
+    renderRecent(data)
+    setDataMode(online)
+  } else if (statsEl) {
+    statsEl.classList.add('stats--error')
+    statsEl.innerHTML = `
+      <p class="stats__hint">No se pudieron cargar los datos.</p>
+      <p class="stats__hint">Inicia la API con <code>npm run server</code> (puerto 3000).</p>
+    `
   }
 }
 

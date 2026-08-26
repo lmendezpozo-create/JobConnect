@@ -554,6 +554,16 @@ a {
 .pill--low { background: rgba(58, 80, 107, 0.5); color: var(--honeydew); }
 .pill--priority { border: 1px solid var(--glass-border); }
 
+/* ── Indicador del origen de datos ───────────────────────── */
+.data-mode {
+  text-align: center;
+  font-size: 0.8rem;
+  margin: 1.5rem 0 0;
+  opacity: 0.9;
+}
+.data-mode--online { color: var(--honeydew); }
+.data-mode--local { color: var(--honey-gold); }
+
 /* ── Responsive adicional ────────────────────────────────── */
 @media (max-width: 600px) {
   .stats { grid-template-columns: repeat(2, 1fr); }
